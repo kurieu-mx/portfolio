@@ -29,8 +29,8 @@ const projects: Project[] = [
       "Full-stack freelancing project for Francisco Iglesias Salon and Spa. Built and fine-tuned a custom LLM to assess hair damage and recommend personalized product combinations, achieving 15% increase in sales.",
     techStack: ["Custom LLMs", "Full Stack Development", "AI Integration", "Python", "Machine Learning"],
     imageUrl: "/images/Hair.png",
-    githubUrl: "https://github.com/vercel/next.js",
-    demoUrl: "#",
+    githubUrl: "#",
+    demoUrl: "https://v0-francisco-iglesias.vercel.app/",
     category: "Full Stack",
     featured: true,
   },
@@ -41,7 +41,7 @@ const projects: Project[] = [
       "University of Michigan Robotics project that tracks eye movements with OpenCV to detect student drowsiness. Applied vector and linear mathematics for real-time detection, integrated with 3D printing for water-spraying response system.",
     techStack: ["OpenCV", "Computer Vision", "Robotics", "3D Printing", "Linear Mathematics", "Python"],
     imageUrl: "/images/Sleep.png",
-    githubUrl: "https://github.com/vercel/next.js",
+    githubUrl: "https://github.com/kurieu-mx/wakey_wakey",
     category: "Robotics",
     featured: true,
   },
@@ -52,7 +52,7 @@ const projects: Project[] = [
       "A custom LLM-powered web scraper that automatically searches and filters internship opportunities across the internet based on personalized criteria.",
     techStack: ["Python", "OpenAI API", "Beautiful Soup", "Selenium", "Machine Learning", "Web Scraping"],
     imageUrl: "/images/Scrapper.jpg",
-    githubUrl: "https://github.com/vercel/next.js",
+    githubUrl: "https://github.com/kurieu-mx/Internship_scrapper",
     demoUrl: "#",
     category: "AI/ML",
     featured: true,
@@ -184,12 +184,14 @@ export function EnhancedProjectsSection() {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-umich-blue-800/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                   <div className="flex gap-2">
-                    <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="secondary" className="bg-maize text-umich-blue-800 hover:bg-maize-600">
-                        <GithubIcon className="h-4 w-4" />
-                      </Button>
-                    </Link>
-                    {project.demoUrl && (
+                    {project.id !== 1 && (
+                      <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                        <Button size="sm" variant="secondary" className="bg-maize text-umich-blue-800 hover:bg-maize-600">
+                          <GithubIcon className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    )}
+                    {project.demoUrl && project.id !== 3 && (
                       <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                         <Button
                           size="sm"
@@ -226,15 +228,17 @@ export function EnhancedProjectsSection() {
               </CardContent>
 
               <CardFooter className="flex justify-between gap-2">
-                <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button
-                    variant="outline"
-                    className="w-full border-maize text-maize hover:bg-maize hover:text-umich-blue-800 transition-all duration-300 bg-transparent"
-                  >
-                    <GithubIcon className="h-4 w-4 mr-2" /> Code
-                  </Button>
-                </Link>
-                {project.demoUrl && (
+                {project.id !== 1 && (
+                  <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                    <Button
+                      variant="outline"
+                      className="w-full border-maize text-maize hover:bg-maize hover:text-umich-blue-800 transition-all duration-300 bg-transparent"
+                    >
+                      <GithubIcon className="h-4 w-4 mr-2" /> Code
+                    </Button>
+                  </Link>
+                )}
+                {project.demoUrl && project.id !== 3 && (
                   <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
                     <Button className="w-full bg-maize text-umich-blue-800 hover:bg-maize-600 transition-all duration-300">
                       <ExternalLinkIcon className="h-4 w-4 mr-2" /> Demo

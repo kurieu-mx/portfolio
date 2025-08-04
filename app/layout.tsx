@@ -6,25 +6,25 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "John Doe - Full Stack Developer | UMich Alumnus",
+  title: "Portfolio - Eugenio Kuri | Full Stack Developer",
   description:
-    "Professional portfolio of John Doe, a full-stack developer and University of Michigan alumnus specializing in React, Next.js, and AI integration.",
+    "Professional portfolio of Eugenio Kuri, a full-stack developer and University of Michigan student specializing in React, Next.js, and AI integration.",
   keywords: "full stack developer, react, next.js, typescript, university of michigan, web development, AI",
-  authors: [{ name: "John Doe" }],
-  creator: "John Doe",
+  authors: [{ name: "Eugenio Kuri" }],
+  creator: "Eugenio Kuri",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://johndoe-portfolio.vercel.app",
-    title: "John Doe - Full Stack Developer",
+    url: "https://portfolio-eugenio-kuri.vercel.app",
+    title: "Portfolio - Eugenio Kuri",
     description: "Professional portfolio showcasing innovative web development projects and technical expertise.",
-    siteName: "John Doe Portfolio",
+    siteName: "Eugenio Kuri Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "John Doe - Full Stack Developer",
+    title: "Portfolio - Eugenio Kuri",
     description: "Professional portfolio showcasing innovative web development projects and technical expertise.",
-    creator: "@johndoe",
+    creator: "@eugeniokuri",
   },
   robots: {
     index: true,

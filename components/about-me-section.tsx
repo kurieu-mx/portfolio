@@ -46,11 +46,11 @@ export function AboutMeSection() {
                 Hello! I'm Eugenio Kuri, a passionate{" "}
                 <span className="font-semibold text-maize">Data Science and Applied Mathematics</span> student at the{" "}
                 <span className="font-semibold text-maize">University of Michigan</span>. Currently pursuing my B.S.E. 
-                with an expected graduation in August 2025. Go Blue! 🏈
+                with an expected graduation in May 2028. Go Blue! 🏈
               </p>
               <p className="text-lg text-gray-300 leading-relaxed">
                 I specialize in building AI-powered applications and computer vision systems. Currently working as a{" "}
-                <span className="font-semibold text-maize">Full-Stack Development Intern at Unif-AI</span> and{" "}
+                <span className="font-semibold text-maize">Full-Stack AI & LLM developer (Part-Time) at Unif-AI</span> and{" "}
                 <span className="font-semibold text-maize">Computer Vision Intern at Merlin Drones</span>, where I develop 
                 custom LLMs, real-time CV systems, and scalable AI solutions using C++, Python, and Go.
               </p>

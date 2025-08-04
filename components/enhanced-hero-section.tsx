@@ -73,7 +73,7 @@ export function EnhancedHeroSection() {
   const [isHovered, setIsHovered] = useState(false)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const fullText = "Eugenio Kuri"
-  const tagline = "Data Science & Applied Mathematics Student | Full-Stack Developer | AI & Computer Vision Engineer"
+  const tagline = "Computer Science Student | Full-Stack Developer | AI & LLM Engineer"
   const [taglineText, setTaglineText] = useState("")
 
   // Image carousel effect
@@ -195,8 +195,8 @@ export function EnhancedHeroSection() {
               </h1>
             </div>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-white font-medium max-w-3xl mx-auto">
-              <span className="inline-block overflow-hidden whitespace-nowrap border-r-4 border-maize pr-1">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-medium max-w-4xl mx-auto leading-relaxed">
+              <span className="inline-block border-r-4 border-maize pr-1">
                 {taglineText}
               </span>
             </p>

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 export function HeroSection() {
   const [text, setText] = useState("")
   const fullText = "Eugenio Kuri"
-  const tagline = "Aspring Full-stack Developer | AI Enthusiast | UMich Engineering Student"
+  const tagline = "Computer Science Student | Full-Stack Developer | AI & LLM Engineer"
   const [taglineText, setTaglineText] = useState("")
 
   useEffect(() => {
@@ -57,14 +57,14 @@ export function HeroSection() {
       </div>
 
       <div className="container px-4 md:px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-5xl mx-auto space-y-6">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-maize relative inline-block">
             <span className="overflow-hidden whitespace-nowrap border-r-4 border-maize pr-1 animate-typing">
               {text}
             </span>
           </h1>
-          <p className="mt-4 text-lg sm:text-xl md:text-2xl text-maize-foreground font-medium">
-            <span className="overflow-hidden whitespace-nowrap border-r-4 border-maize pr-1 animate-typing delay-1s">
+          <p className="mt-4 text-base sm:text-lg md:text-xl lg:text-2xl text-maize-foreground font-medium max-w-4xl mx-auto leading-relaxed">
+            <span className="border-r-4 border-maize pr-1 animate-typing delay-1s inline-block">
               {taglineText}
             </span>
           </p>

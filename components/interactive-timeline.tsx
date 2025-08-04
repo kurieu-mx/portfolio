@@ -17,16 +17,17 @@ interface TimelineItem {
 const timelineData: TimelineItem[] = [
   {
     id: 1,
-    title: "Full-Stack Development Intern",
+    title: "Full-Stack AI & LLM Developer (Part-Time)",
     company: "Unif-AI",
-    period: "May 2025 - Present",
+    period: "May 2025 - Present (Promoted from Intern)",
     description: [
-      "Used C++ and Python to build custom AI tools and applications for clients in law and accounting",
-      "Created web apps for lawyers to process legal documents and accountants to manage firm accountability",
-      "Worked with Firebase, SQL, Pinecone, OpenAI APIs, and AWS to build scalable solutions",
-      "Applied computer science and data science knowledge to design custom LLMs for document processing",
+      "Develop custom AI tools and applications in C++ and Python for clients in fields such as law and accounting",
+      "Build a web app for lawyers to process and generate legal documents, and an app for accountants to manage firm accountability",
+      "Leverage technologies like Firebase, SQL, Pinecone, OpenAI APIs, and AWS to design and deploy scalable solutions",
+      "Apply computer science and data science knowledge to improve document processing and information organization",
+      "Design and fine-tune custom large language models (LLMs) for document processing, context handling, and information organization",
     ],
-    technologies: ["C++", "Python", "Firebase", "SQL", "Pinecone", "OpenAI APIs", "AWS"],
+    technologies: ["C++", "Python", "Firebase", "SQL", "Pinecone", "OpenAI APIs", "AWS", "LLMs"],
     type: "work",
   },
   {

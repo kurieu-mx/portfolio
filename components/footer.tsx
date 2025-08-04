@@ -8,7 +8,7 @@ export function Footer() {
         <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} My Portfolio. All rights reserved.</p>
         <div className="flex gap-4">
           <Link
-            href="https://github.com/vercel"
+            href="https://github.com/kurieu-mx"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-maize transition-colors duration-300"
@@ -17,7 +17,7 @@ export function Footer() {
             <span className="sr-only">GitHub</span>
           </Link>
           <Link
-            href="https://linkedin.com/in/yourprofile"
+            href="https://linkedin.com/in/kurieu"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-maize transition-colors duration-300"
@@ -26,7 +26,7 @@ export function Footer() {
             <span className="sr-only">LinkedIn</span>
           </Link>
           <Link
-            href="mailto:your.email@example.com"
+            href="mailto:kurieu@umich.edu"
             className="text-gray-400 hover:text-maize transition-colors duration-300"
           >
             <MailIcon className="h-6 w-6" />

@@ -12,7 +12,7 @@ export function ResumeSection() {
           <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-maize">Download My Resume</CardTitle>
-              <Link href="/placeholder.pdf" target="_blank" rel="noopener noreferrer" download>
+              <Link href="/Eugenio%20Kuri%20Resume%20%282%29.pdf" target="_blank" rel="noopener noreferrer" download="Eugenio Kuri Resume (2).pdf">
                 <Button className="bg-maize text-umich-blue-800 hover:bg-maize-600">
                   <DownloadIcon className="h-4 w-4 mr-2" /> Download PDF
                 </Button>
@@ -29,13 +29,14 @@ export function ResumeSection() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <h3 className="font-semibold text-lg text-maize">Full-Stack Development Intern | Unif-AI</h3>
-                <p className="text-gray-400">May 2025 - Present</p>
+                <h3 className="font-semibold text-lg text-maize">Full-Stack AI & LLM Developer (Part-Time) | Unif-AI</h3>
+                <p className="text-gray-400">May 2025 - Present (Promoted from Intern)</p>
                 <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
-                  <li>Built custom AI tools and applications using C++ and Python for law and accounting clients.</li>
-                  <li>Created web apps for legal document processing and firm accountability management.</li>
-                  <li>Worked with Firebase, SQL, Pinecone, OpenAI APIs, and AWS for scalable solutions.</li>
-                  <li>Designed and adapted custom LLMs for document processing and information organization.</li>
+                  <li>Develop custom AI tools and applications in C++ and Python for clients in fields such as law and accounting.</li>
+                  <li>Build a web app for lawyers to process and generate legal documents, and an app for accountants to manage firm accountability.</li>
+                  <li>Leverage technologies like Firebase, SQL, Pinecone, OpenAI APIs, and AWS to design and deploy scalable solutions.</li>
+                  <li>Apply computer science and data science knowledge to improve document processing and information organization.</li>
+                  <li>Design and fine-tune custom large language models (LLMs) for document processing, context handling, and information organization.</li>
                 </ul>
               </div>
               <div>

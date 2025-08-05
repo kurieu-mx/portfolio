@@ -19,6 +19,7 @@ interface Project {
   demoUrl?: string
   category: string
   featured: boolean
+  status?: string
 }
 
 const projects: Project[] = [
@@ -59,14 +60,15 @@ const projects: Project[] = [
   },
   {
     id: 4,
-    title: "Coming Soon!",
+    title: "AdHoc-LM",
     description:
-      "Exciting new project in development. Stay tuned for updates on this upcoming addition to my portfolio.",
-    techStack: ["Coming Soon"],
-    imageUrl: "/images/ComingSoon.png",
-    githubUrl: "#",
-    category: "Mobile",
-    featured: false,
+      "A transformer-based language model built from scratch and specialized for diplomatic dialogue, debate, and resolution drafting. This custom LLM architecture is designed to understand and generate content for Model United Nations scenarios.",
+    techStack: ["Python", "Transformers", "PyTorch", "NLP", "Machine Learning", "Diplomatic AI", "MUN"],
+    imageUrl: "/images/mun.png",
+    githubUrl: "https://github.com/kurieu-mx/AdHoc-LM",
+    category: "AI/ML",
+    featured: true,
+    status: "IN PROGRESS",
   },
   {
     id: 5,
@@ -179,9 +181,16 @@ export function EnhancedProjectsSection() {
                   height={400}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110 opacity-80"
                 />
-                {project.featured && (
-                  <Badge className="absolute top-2 right-2 bg-maize text-umich-blue-800">Featured</Badge>
-                )}
+                <div className="absolute top-2 right-2 flex gap-2">
+                  {project.featured && (
+                    <Badge className="bg-maize text-umich-blue-800">Featured</Badge>
+                  )}
+                  {project.status && (
+                    <Badge className="bg-orange-500 text-white">
+                      {project.status}
+                    </Badge>
+                  )}
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-umich-blue-800/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                   <div className="flex gap-2">
                     {project.id !== 1 && (

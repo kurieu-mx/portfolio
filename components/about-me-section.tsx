@@ -1,41 +1,50 @@
 "use client"
 
-import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, LabelList } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useState } from "react"
 
 const skillsData = [
-  { name: "Python", level: 90, fill: "#FFCB05" },
-  { name: "C++", level: 85, fill: "#FFCB05" },
-  { name: "Go (Golang)", level: 80, fill: "#FFCB05" },
-  { name: "OpenCV/Computer Vision", level: 85, fill: "#FFCB05" },
-  { name: "Machine Learning/LLMs", level: 80, fill: "#FFCB05" },
-  { name: "AWS/Firebase/SQL", level: 75, fill: "#FFCB05" },
+  { name: "Python", level: 92, fill: "#FFCB05" },
+  { name: "Go (Golang)", level: 88, fill: "#FFCB05" },
+  { name: "C++", level: 88, fill: "#FFCB05" },
+  { name: "Robotics (ROS 2 / PX4)", level: 85, fill: "#FFCB05" },
+  { name: "Computer Vision (OpenCV / YOLO)", level: 85, fill: "#FFCB05" },
+  { name: "Cloud & Data (GCP / BigQuery)", level: 80, fill: "#FFCB05" },
 ]
 
 const interests = [
-  "Artificial Intelligence",
-  "Machine Learning & LLMs",
+  "Autonomous Systems",
+  "Robotics & Drones",
   "Computer Vision",
-  "Embedded Systems",
-  "Robotics",
-  "Camping & Outdoor Activities",
-  "Movies & Cinema",
+  "Distributed Systems",
+  "Edge AI",
+  "Machine Learning & LLMs",
+  "Public Speaking (TEDx)",
   "Mentoring & Teaching",
+  "Camping & Outdoors",
+]
+
+const coursework = [
+  "Data Structures & Algorithms",
+  "Multivariable & Vector Calculus",
+  "Discrete Mathematics",
+  "Machine Learning",
+  "Applied Mathematics",
 ]
 
 export function AboutMeSection() {
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null)
-
   return (
     <section id="about" className="py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-maize">About Me</h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Passionate about creating innovative solutions and pushing the boundaries of what's possible with code.
+          <p className="text-maize/70 font-medium tracking-widest uppercase text-sm">Get to know me</p>
+          <h2 className="text-3xl md:text-4xl font-bold mt-2 bg-gradient-to-r from-maize to-maize-300 bg-clip-text text-transparent">
+            About Me
+          </h2>
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto mt-4">
+            Robotics &amp; software engineer who likes hard systems problems — and shipping them.
           </p>
         </div>
 
@@ -43,36 +52,39 @@ export function AboutMeSection() {
           <div className="space-y-6">
             <div className="prose prose-lg max-w-none">
               <p className="text-lg text-gray-300 leading-relaxed">
-                Hello! I'm Eugenio Kuri, a passionate{" "}
-                <span className="font-semibold text-maize">Data Science and Applied Mathematics</span> student at the{" "}
-                <span className="font-semibold text-maize">University of Michigan</span>. Currently pursuing my B.S.E. 
-                with an expected graduation in May 2028. Go Blue! 🏈
+                Hi, I&apos;m <span className="font-semibold text-maize">Eugenio Kuri</span> — a software engineer
+                specializing in{" "}
+                <span className="font-semibold text-maize">robotics, autonomous systems, and high-performance
+                backends</span>, built on a foundation in{" "}
+                <span className="font-semibold text-maize">Data Science &amp; Applied Mathematics</span> at the
+                University of Michigan. Go Blue! 〽️
               </p>
               <p className="text-lg text-gray-300 leading-relaxed">
-                I specialize in building AI-powered applications and computer vision systems. Currently working as a{" "}
-                <span className="font-semibold text-maize">Full-Stack AI & LLM developer (Part-Time) at Unif-AI</span> and{" "}
-                <span className="font-semibold text-maize">Computer Vision Intern at Merlin Drones</span>, where I develop 
-                custom LLMs, real-time CV systems, and scalable AI solutions using C++, Python, and Go.
+                Lately I&apos;ve been building{" "}
+                <span className="font-medium text-white">collision-avoidance for autonomous drone swarms</span> in Go
+                (ROS 2, PX4, ORCA, LiDAR), <span className="font-medium text-white">real-time edge perception</span> on
+                Raspberry Pi CM4 with YOLO/ONNX and OpenCV, and{" "}
+                <span className="font-medium text-white">automated distributed systems</span> in Go, C++, and Python.
+                Before that I engineered LLM-assisted financial-automation pipelines at Embedding Labs.
               </p>
               <p className="text-lg text-gray-300 leading-relaxed">
-                When I'm not coding, you can find me camping outdoors, watching movies (I even gave a{" "}
-                <span className="font-semibold text-maize">TEDx Talk</span>!), or exploring the latest in AI and LLM 
-                technologies. I'm fluent in both English and Spanish, and I love mentoring fellow students in robotics 
-                and programming.
+                I care about reliable systems, clean interfaces, and clear communication — I&apos;m a featured{" "}
+                <span className="font-semibold text-maize">TEDx speaker</span>, I mentor fellow robotics students, and
+                I&apos;m fluent in English and Spanish. Off the clock you&apos;ll find me camping or at the movies.
               </p>
             </div>
 
             <Card className="shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
               <CardHeader>
-                <CardTitle className="text-maize">Professional Interests</CardTitle>
+                <CardTitle className="text-maize">Interests</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {interests.map((interest, index) => (
+                  {interests.map((interest) => (
                     <Badge
-                      key={index}
+                      key={interest}
                       variant="secondary"
-                      className="bg-maize/20 text-maize hover:bg-maize hover:text-umich-blue-800 transition-all duration-300 cursor-pointer border border-maize/30"
+                      className="bg-maize/10 text-maize hover:bg-maize hover:text-umich-blue-800 transition-all duration-300 border border-maize/30"
                     >
                       {interest}
                     </Badge>
@@ -86,40 +98,29 @@ export function AboutMeSection() {
             <Card className="shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
               <CardHeader>
                 <CardTitle className="text-maize">Technical Skills</CardTitle>
-                <p className="text-sm text-gray-400">Hover over bars to see proficiency levels</p>
+                <p className="text-sm text-gray-400">Core areas I build with day to day</p>
               </CardHeader>
               <CardContent>
                 <ChartContainer
-                  config={{
-                    js: { label: "JavaScript/TypeScript", color: "#FFCB05" },
-                    react: { label: "React/Next.js", color: "#FFCB05" },
-                    node: { label: "Node.js", color: "#FFCB05" },
-                    python: { label: "Python", color: "#FFCB05" },
-                    db: { label: "SQL/NoSQL", color: "#FFCB05" },
-                    cloud: { label: "Cloud (AWS/Vercel)", color: "#FFCB05" },
-                  }}
+                  config={{ level: { label: "Proficiency", color: "#FFCB05" } }}
                   className="min-h-[300px] w-full"
                 >
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={skillsData}
-                      layout="vertical"
-                      margin={{ left: 120, right: 20 }}
-                      onMouseEnter={(data) => setHoveredSkill(data?.activeLabel || null)}
-                      onMouseLeave={() => setHoveredSkill(null)}
-                    >
-                      <XAxis type="number" hide />
+                    <BarChart data={skillsData} layout="vertical" margin={{ left: 8, right: 40 }}>
+                      <XAxis type="number" domain={[0, 100]} hide />
                       <YAxis
                         dataKey="name"
                         type="category"
                         tickLine={false}
-                        tickMargin={10}
+                        tickMargin={8}
                         axisLine={false}
-                        className="text-sm fill-gray-300"
-                        tick={{ fill: "#D1D5DB" }}
+                        width={170}
+                        tick={{ fill: "#D1D5DB", fontSize: 12 }}
                       />
                       <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                      <Bar dataKey="level" radius={5} className="transition-all duration-300" fill="#FFCB05" />
+                      <Bar dataKey="level" radius={5} fill="#FFCB05">
+                        <LabelList dataKey="level" position="right" className="fill-gray-400 text-xs" />
+                      </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </ChartContainer>
@@ -134,23 +135,17 @@ export function AboutMeSection() {
                 <div className="relative pl-6 border-l-4 border-maize">
                   <div className="absolute -left-2 top-0 w-4 h-4 bg-maize rounded-full"></div>
                   <h3 className="font-semibold text-lg text-maize">University of Michigan</h3>
-                  <p className="text-gray-300 font-medium">B.S.E. in Data Science and Applied Mathematics Minor</p>
-                  <p className="text-sm text-gray-400">Ann Arbor, MI | August 2025 - Present</p>
+                  <p className="text-gray-300 font-medium">B.S.E. in Data Science · Minor in Applied Mathematics</p>
+                  <p className="text-sm text-gray-400">Ann Arbor, MI</p>
                   <p className="text-sm text-gray-400 mt-2">
-                    <strong className="text-maize">Current GPA:</strong> 3.68/4.0
+                    <strong className="text-maize">GPA:</strong> 3.68 / 4.0
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {["Data Structures & Algorithms", "Multivariable Calculus", "Vector Calculus", "Discrete Mathematics", "Machine Learning"].map(
-                      (course) => (
-                        <Badge
-                          key={course}
-                          variant="outline"
-                          className="border-maize text-maize text-xs bg-transparent"
-                        >
-                          {course}
-                        </Badge>
-                      ),
-                    )}
+                    {coursework.map((course) => (
+                      <Badge key={course} variant="outline" className="border-maize/60 text-maize text-xs bg-transparent">
+                        {course}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </CardContent>

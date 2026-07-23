@@ -79,7 +79,7 @@ export function EnhancedHeroSection() {
 
   useEffect(() => setMounted(true), [])
   const fullText = "Eugenio Kuri"
-  const tagline = "Data Science Student | Full-Stack AI & LLM Developer | Computer Vision"
+  const tagline = "Robotics & Software Engineer | Autonomous Systems · Drone Swarms | Data Science @ Michigan"
   const [taglineText, setTaglineText] = useState("")
 
   // Image carousel effect

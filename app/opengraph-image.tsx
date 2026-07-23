@@ -42,17 +42,17 @@ export default function OpengraphImage() {
           >
             EK
           </div>
-          <div style={{ color: "#FFCB05", fontSize: "28px", fontWeight: 600 }}>Data Science @ Michigan</div>
+          <div style={{ color: "#FFCB05", fontSize: "28px", fontWeight: 600 }}>Robotics & Software Engineer</div>
         </div>
 
         <div style={{ color: "#FFCB05", fontSize: "88px", fontWeight: 800, lineHeight: 1.05 }}>Eugenio Kuri</div>
 
         <div style={{ color: "#E5E7EB", fontSize: "36px", marginTop: "24px", maxWidth: "900px" }}>
-          Full-Stack AI &amp; LLM Developer · Computer Vision
+          Autonomous Drone Swarms · Edge Computer Vision · Distributed Systems
         </div>
 
         <div style={{ display: "flex", gap: "16px", marginTop: "48px" }}>
-          {["Python", "PyTorch", "OpenCV", "Next.js", "Go"].map((t) => (
+          {["Go", "ROS 2", "PX4", "OpenCV", "Python"].map((t) => (
             <div
               key={t}
               style={{

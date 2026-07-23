@@ -3,24 +3,85 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { DownloadIcon } from "lucide-react"
 
+const RESUME_PATH = "/Eugenio-Kuri-Resume.pdf"
+
+interface Role {
+  title: string
+  company: string
+  period: string
+  bullets: string[]
+}
+
+const experience: Role[] = [
+  {
+    title: "Software Engineer",
+    company: "Merlin Drones — Remote",
+    period: "May 2026 - Aug 2026",
+    bullets: [
+      "Designed and implemented a collision-avoidance system for autonomous drone swarms in Go, improving flight safety through ROS 2, PX4, ORCA, and LiDAR integration.",
+      "Developed an edge perception pipeline on Raspberry Pi CM4 using YOLO/ONNX and OpenCV, enabling accurate GPS localization and continuous target tracking.",
+      "Implemented end-to-end MAVLink workflows for mission cancellation, in-flight recovery, and transit-speed control across the swarm platform.",
+      "Engineered a one-command Gazebo simulation test harness for obstacle scenarios, automating validation and repeatable regression testing in CI/CD.",
+      "Built Ground Control Station features (live telemetry, map-based mission planning, USB GNSS, failsafes) and resolved distributed-systems failures — leader-election conflicts, race conditions, and command timeouts.",
+    ],
+  },
+  {
+    title: "Software Engineer",
+    company: "Embedding Labs — Remote",
+    period: "May 2025 - Aug 2025",
+    bullets: [
+      "Engineered an automated bookkeeping platform in Python that transformed invoices and bank statements into double-entry journal entries.",
+      "Automated client onboarding by deriving rules from historical ledgers with LLM-assisted fallback and validation, scaling the platform past its three-customer limit.",
+      "Replaced a vision-based statement-extraction pipeline with a deterministic pdfplumber parser, reducing operational complexity.",
+      "Built responsive operator interfaces in Next.js, React, and TypeScript for policy diffing, FX management, onboarding, and PDF exports.",
+      "Integrated Firestore, BigQuery, and OpenAI APIs into scalable pipelines that automated financial-document processing.",
+    ],
+  },
+  {
+    title: "Instructional Aide",
+    company: "Michigan Department of Robotics — Ann Arbor, MI",
+    period: "Jan 2025 - Apr 2025",
+    bullets: [
+      "Mentored 10+ undergraduate robotics teams on system architecture, mechanical design, electronics integration, and software debugging.",
+      "Developed iterative testing protocols that accelerated hardware-software debugging across 8 capstone robotics projects.",
+      "Provided hands-on support with embedded systems, sensors, motor controllers, and robotics software.",
+    ],
+  },
+]
+
+const skillGroups = [
+  { label: "Languages", items: "C++, Go (Golang), Python, TypeScript, JavaScript, SQL" },
+  { label: "Robotics & Systems", items: "ROS 2, PX4, Gazebo, MAVLink, embedded systems, Raspberry Pi CM4" },
+  { label: "Vision & ML", items: "OpenCV, YOLO, ONNX, custom LLMs, OpenAI API" },
+  { label: "Cloud & Data", items: "GCP, Firestore, BigQuery, SQL" },
+  { label: "Tools & Practices", items: "Git, Linux, CI/CD, distributed systems, cross-functional collaboration" },
+  { label: "Languages (spoken)", items: "English (native), Spanish (native)" },
+]
+
 export function ResumeSection() {
   return (
     <section id="resume-download" className="py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-maize">Resume/CV</h2>
+        <div className="text-center mb-12">
+          <p className="text-maize/70 font-medium tracking-widest uppercase text-sm">Experience</p>
+          <h2 className="text-3xl md:text-4xl font-bold mt-2 bg-gradient-to-r from-maize to-maize-300 bg-clip-text text-transparent">
+            Resume
+          </h2>
+        </div>
+
         <div className="max-w-3xl mx-auto space-y-8">
           <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-maize">Download My Resume</CardTitle>
-              <Link href="/Eugenio%20Kuri%20Resume%20%282%29.pdf" target="_blank" rel="noopener noreferrer" download="Eugenio Kuri Resume (2).pdf">
-                <Button className="bg-maize text-umich-blue-800 hover:bg-maize-600">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 space-y-0">
+              <div>
+                <CardTitle className="text-maize">Download my resume</CardTitle>
+                <p className="text-sm text-gray-400 mt-1">The full one-page PDF, up to date.</p>
+              </div>
+              <Link href={RESUME_PATH} target="_blank" rel="noopener noreferrer" download>
+                <Button className="bg-maize text-umich-blue-800 hover:bg-maize-600 shrink-0">
                   <DownloadIcon className="h-4 w-4 mr-2" /> Download PDF
                 </Button>
               </Link>
             </CardHeader>
-            <CardContent>
-              <p className="text-gray-300">A detailed overview of my professional experience, skills, and education.</p>
-            </CardContent>
           </Card>
 
           <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
@@ -28,64 +89,35 @@ export function ResumeSection() {
               <CardTitle className="text-maize">Experience</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Full-Stack AI & LLM Developer (Part-Time) | Unif-AI</h3>
-                <p className="text-gray-400">May 2025 - Present (Promoted from Intern)</p>
-                <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
-                  <li>Develop custom AI tools and applications in C++ and Python for clients in fields such as law and accounting.</li>
-                  <li>Build a web app for lawyers to process and generate legal documents, and an app for accountants to manage firm accountability.</li>
-                  <li>Leverage technologies like Firebase, SQL, Pinecone, OpenAI APIs, and AWS to design and deploy scalable solutions.</li>
-                  <li>Apply computer science and data science knowledge to improve document processing and information organization.</li>
-                  <li>Design and fine-tune custom large language models (LLMs) for document processing, context handling, and information organization.</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Go & Computer Vision Intern | Merlin Drones</h3>
-                <p className="text-gray-400">February 2025 - Present</p>
-                <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
-                  <li>Built Go modules on Raspberry Pi for real-time computer vision vehicle detection.</li>
-                  <li>Designed live display feed integrating detection results and GPS coordinates.</li>
-                  <li>Optimized performance on resource-constrained embedded systems hardware.</li>
-                  <li>Developed internal drone software tools combining computer vision and data processing.</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Instructional Aide | Michigan Department of Robotics</h3>
-                <p className="text-gray-400">January 2025 - Present</p>
-                <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
-                  <li>Assisted students in designing and building robots with guidance on robotics design.</li>
-                  <li>Supported lab sessions by troubleshooting technical challenges.</li>
-                  <li>Mentored students to foster hands-on problem-solving skills in robotics projects.</li>
-                </ul>
-              </div>
+              {experience.map((role) => (
+                <div key={`${role.company}-${role.period}`}>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                    <h3 className="font-semibold text-lg text-maize">
+                      {role.title} · {role.company}
+                    </h3>
+                    <p className="text-sm text-gray-400 shrink-0">{role.period}</p>
+                  </div>
+                  <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
+                    {role.bullets.map((b, i) => (
+                      <li key={i}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
           <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
             <CardHeader>
-              <CardTitle className="text-maize">Skills & Certifications</CardTitle>
+              <CardTitle className="text-maize">Skills &amp; Tools</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Programming Languages:</h3>
-                <p className="text-gray-300">C++, Python, Go (Golang), JavaScript, SQL</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-maize">AI & Machine Learning:</h3>
-                <p className="text-gray-300">OpenCV, Custom LLMs, Machine Learning, Computer Vision, OpenAI APIs</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Databases & Cloud:</h3>
-                <p className="text-gray-300">SQL, Firebase, AWS, Pinecone (Vector Database)</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Embedded Systems & Hardware:</h3>
-                <p className="text-gray-300">Raspberry Pi, Embedded Systems, Robotics, 3D Printing</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-maize">Languages:</h3>
-                <p className="text-gray-300">English (Native), Spanish (Native)</p>
-              </div>
+              {skillGroups.map((group) => (
+                <div key={group.label}>
+                  <h3 className="font-semibold text-maize">{group.label}</h3>
+                  <p className="text-gray-300">{group.items}</p>
+                </div>
+              ))}
             </CardContent>
           </Card>
         </div>

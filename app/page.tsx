@@ -4,6 +4,7 @@ import { AboutMeSection } from "@/components/about-me-section"
 import { TechStackShowcase } from "@/components/tech-stack-showcase"
 import { ResumeSection } from "@/components/resume-section"
 import { InteractiveTimeline } from "@/components/interactive-timeline"
+import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { FadeInSection } from "@/components/section-transitions"
 import { GlowMenu } from "@/components/glow-menu"
@@ -45,6 +46,10 @@ export default function HomePage() {
 
         <FadeInSection>
           <ResumeSection />
+        </FadeInSection>
+
+        <FadeInSection>
+          <ContactSection />
         </FadeInSection>
       </main>
       <Footer />

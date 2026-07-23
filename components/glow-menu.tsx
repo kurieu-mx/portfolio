@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { HomeIcon, FolderIcon, UserIcon, FileTextIcon } from "lucide-react"
+import { HomeIcon, FolderIcon, UserIcon, FileTextIcon, MailIcon } from "lucide-react"
 
 interface MenuItem {
   id: string
@@ -41,6 +41,12 @@ const menuItems: MenuItem[] = [
     label: "Resume/CV",
     href: "#resume-download",
     icon: <FileTextIcon className="w-5 h-5" />,
+  },
+  {
+    id: "contact",
+    label: "Contact",
+    href: "#contact",
+    icon: <MailIcon className="w-5 h-5" />,
   },
 ]
 

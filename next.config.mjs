@@ -10,8 +10,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    // Serve modern formats and responsive sizes (Vercel optimizes on the fly).
-    formats: ["image/avif", "image/webp"],
+    unoptimized: true,
   },
 }
 

@@ -107,7 +107,7 @@ export function EnhancedProjectsSection() {
     })
 
   return (
-    <section id="projects" className="py-16 md:py-24 bg-dark-grey-800">
+    <section id="projects" className="hud-grid py-16 md:py-24 bg-dark-grey-800">
       <div className="container px-4 md:px-6">
         <SectionHeading
           index="01"
@@ -169,7 +169,7 @@ export function EnhancedProjectsSection() {
             return (
               <Card
                 key={project.id}
-                className="group flex flex-col overflow-hidden shadow-lg transition-all duration-500 border-2 border-dark-grey-600 hover:border-maize/50 hover:shadow-2xl hover:-translate-y-1 bg-dark-grey-900"
+                className="hud-panel group flex flex-col overflow-hidden shadow-lg transition-all duration-500 border-2 border-dark-grey-600 hover:border-maize/50 hover:shadow-2xl hover:-translate-y-1 bg-dark-grey-900"
               >
                 <div className="relative overflow-hidden h-48">
                   {project.imageUrl ? (

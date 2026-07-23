@@ -42,17 +42,17 @@ export default function OpengraphImage() {
           >
             EK
           </div>
-          <div style={{ color: "#FFCB05", fontSize: "28px", fontWeight: 600 }}>Robotics & Software Engineer</div>
+          <div style={{ color: "#FFCB05", fontSize: "28px", fontWeight: 600 }}>Software & AI Engineer</div>
         </div>
 
         <div style={{ color: "#FFCB05", fontSize: "88px", fontWeight: 800, lineHeight: 1.05 }}>Eugenio Kuri</div>
 
         <div style={{ color: "#E5E7EB", fontSize: "36px", marginTop: "24px", maxWidth: "900px" }}>
-          Autonomous Drone Swarms · Edge Computer Vision · Distributed Systems
+          Machine Learning · Full-Stack Software · Autonomous Systems
         </div>
 
         <div style={{ display: "flex", gap: "16px", marginTop: "48px" }}>
-          {["Go", "ROS 2", "PX4", "OpenCV", "Python"].map((t) => (
+          {["Python", "Go", "C++", "AI / LLMs", "React"].map((t) => (
             <div
               key={t}
               style={{

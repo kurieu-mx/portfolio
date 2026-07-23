@@ -32,7 +32,7 @@ export default function HomePage() {
         </FadeInSection>
 
         <FadeInSection>
-          <section id="resume" className="py-16 md:py-24 bg-dark-grey-800">
+          <section id="resume" className="hud-grid py-16 md:py-24 bg-dark-grey-800">
             <div className="container px-4 md:px-6">
               <SectionHeading
                 index="04"

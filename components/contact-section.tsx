@@ -51,7 +51,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-dark-grey-800">
+    <section id="contact" className="hud-grid py-16 md:py-24 bg-dark-grey-800">
       <div className="container px-4 md:px-6">
         <SectionHeading
           index="06"
@@ -61,7 +61,7 @@ export function ContactSection() {
         />
 
         <div className="grid lg:grid-cols-5 gap-8 max-w-4xl mx-auto">
-          <Card className="lg:col-span-3 shadow-lg border-2 border-dark-grey-600 bg-dark-grey-900">
+          <Card className="hud-panel lg:col-span-3 shadow-lg border-2 border-dark-grey-600 bg-dark-grey-900">
             <CardHeader>
               <CardTitle className="text-maize">Send a message</CardTitle>
             </CardHeader>
@@ -143,7 +143,7 @@ export function ContactSection() {
             </CardContent>
           </Card>
 
-          <Card className="lg:col-span-2 shadow-lg border-2 border-dark-grey-600 bg-dark-grey-900">
+          <Card className="hud-panel lg:col-span-2 shadow-lg border-2 border-dark-grey-600 bg-dark-grey-900">
             <CardHeader>
               <CardTitle className="text-maize">Other ways to reach me</CardTitle>
             </CardHeader>

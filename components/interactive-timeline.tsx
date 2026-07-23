@@ -119,7 +119,7 @@ export function InteractiveTimeline() {
             {/* Content card */}
             <div className={`ml-12 md:ml-0 md:w-1/2 ${index % 2 === 0 ? "md:pr-8" : "md:pl-8"}`}>
               <Card
-                className={`cursor-pointer transition-all duration-300 hover:shadow-xl border-2 bg-dark-grey-800 ${
+                className={`hud-panel cursor-pointer transition-all duration-300 hover:shadow-xl border-2 bg-dark-grey-800 ${
                   selectedItem === item.id
                     ? "border-maize shadow-2xl scale-105 shadow-maize/20"
                     : "border-dark-grey-600 hover:border-maize/50"

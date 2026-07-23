@@ -61,12 +61,12 @@ const skillGroups = [
 
 export function ResumeSection() {
   return (
-    <section id="resume-download" className="py-16 md:py-24 bg-dark-grey-900">
+    <section id="resume-download" className="hud-grid py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
         <SectionHeading index="05" eyebrow="DOSSIER" title="Resume" subtitle="Experience, skills, and the one-page PDF." />
 
         <div className="max-w-3xl mx-auto space-y-8">
-          <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
+          <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 space-y-0">
               <div>
                 <CardTitle className="text-maize">Download my resume</CardTitle>
@@ -80,7 +80,7 @@ export function ResumeSection() {
             </CardHeader>
           </Card>
 
-          <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
+          <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
             <CardHeader>
               <CardTitle className="text-maize">Experience</CardTitle>
             </CardHeader>
@@ -103,7 +103,7 @@ export function ResumeSection() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
+          <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
             <CardHeader>
               <CardTitle className="text-maize">Skills &amp; Tools</CardTitle>
             </CardHeader>

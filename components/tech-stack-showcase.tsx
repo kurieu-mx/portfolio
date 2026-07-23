@@ -35,7 +35,7 @@ export function TechStackShowcase() {
   const [hoveredTech, setHoveredTech] = useState<string | null>(null)
 
   return (
-    <div className="py-16 bg-dark-grey-900">
+    <div className="hud-grid py-16 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
         <SectionHeading index="03" eyebrow="STACK" title="Toolbox" subtitle="The technologies I build with day to day." />
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 max-w-4xl mx-auto">

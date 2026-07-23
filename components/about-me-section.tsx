@@ -37,33 +37,32 @@ const coursework = [
 
 export function AboutMeSection() {
   return (
-    <section id="about" className="py-16 md:py-24 bg-dark-grey-900">
+    <section id="about" className="hud-grid py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
         <SectionHeading
           index="02"
           eyebrow="PROFILE"
           title="About Me"
-          subtitle="Robotics & software engineer who likes hard systems problems — and shipping them."
+          subtitle="Software & AI engineer who likes hard problems across the stack — and shipping them."
         />
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
             <div className="prose prose-lg max-w-none">
               <p className="text-lg text-gray-300 leading-relaxed">
-                Hi, I&apos;m <span className="font-semibold text-maize">Eugenio Kuri</span> — a software engineer
-                specializing in{" "}
-                <span className="font-semibold text-maize">robotics, autonomous systems, and high-performance
-                backends</span>, built on a foundation in{" "}
+                Hi, I&apos;m <span className="font-semibold text-maize">Eugenio Kuri</span> — a{" "}
+                <span className="font-semibold text-maize">software &amp; AI engineer</span> who builds across the stack:
+                machine learning and LLMs, full-stack applications, and autonomous systems — grounded in{" "}
                 <span className="font-semibold text-maize">Data Science &amp; Applied Mathematics</span> at the
                 University of Michigan. Go Blue! 〽️
               </p>
               <p className="text-lg text-gray-300 leading-relaxed">
-                Lately I&apos;ve been building{" "}
-                <span className="font-medium text-white">collision-avoidance for autonomous drone swarms</span> in Go
-                (ROS 2, PX4, ORCA, LiDAR), <span className="font-medium text-white">real-time edge perception</span> on
-                Raspberry Pi CM4 with YOLO/ONNX and OpenCV, and{" "}
-                <span className="font-medium text-white">automated distributed systems</span> in Go, C++, and Python.
-                Before that I engineered LLM-assisted financial-automation pipelines at Embedding Labs.
+                I&apos;ve shipped <span className="font-medium text-white">LLM-powered products</span> (custom models,
+                financial-automation pipelines, and recommendation systems at Embedding Labs and beyond),{" "}
+                <span className="font-medium text-white">real-time computer vision</span>, and{" "}
+                <span className="font-medium text-white">high-performance, autonomous systems</span> — including
+                collision-avoidance for drone swarms in Go with ROS 2 and PX4. I like turning research-grade ideas into
+                things people can actually use.
               </p>
               <p className="text-lg text-gray-300 leading-relaxed">
                 I care about reliable systems, clean interfaces, and clear communication — I&apos;m a featured{" "}
@@ -72,7 +71,7 @@ export function AboutMeSection() {
               </p>
             </div>
 
-            <Card className="shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
+            <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
               <CardHeader>
                 <CardTitle className="text-maize">Interests</CardTitle>
               </CardHeader>
@@ -93,7 +92,7 @@ export function AboutMeSection() {
           </div>
 
           <div className="space-y-8">
-            <Card className="shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
+            <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
               <CardHeader>
                 <CardTitle className="text-maize">Technical Skills</CardTitle>
                 <p className="text-sm text-gray-400">Core areas I build with day to day</p>
@@ -125,7 +124,7 @@ export function AboutMeSection() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
+            <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
               <CardHeader>
                 <CardTitle className="text-maize">Education</CardTitle>
               </CardHeader>

@@ -29,12 +29,12 @@ const personalImages = [
   {
     src: "/images/graduation-group.jpg",
     alt: "Graduation Group Photo - University of Michigan",
-    title: "Perserverent",
+    title: "Perseverant",
   },
   {
     src: "/images/martial-arts.jpg",
     alt: "Martial Arts Competition - Sports Achievement",
-    title: "Discplined",
+    title: "Disciplined",
   },
   {
     src: "/images/graduation-speech.jpg",
@@ -72,8 +72,14 @@ export function EnhancedHeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  // Decorative elements use Math.random() for positioning; only render them
+  // after mount so the server and client produce identical initial markup
+  // (avoids React hydration mismatches).
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
   const fullText = "Eugenio Kuri"
-  const tagline = "Computer Science Student | Full-Stack Developer | AI & LLM Engineer"
+  const tagline = "Data Science Student | Full-Stack AI & LLM Developer | Computer Vision"
   const [taglineText, setTaglineText] = useState("")
 
   // Image carousel effect
@@ -176,10 +182,11 @@ export function EnhancedHeroSection() {
       </div>
 
       {/* Floating code snippets */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        {codeSnippets.map((snippet, index) => (
-          <FloatingCodeSnippet key={index} snippet={snippet} delay={index * 0.8} />
-        ))}
+      <div className="absolute inset-0 z-10 pointer-events-none" aria-hidden="true">
+        {mounted &&
+          codeSnippets.map((snippet, index) => (
+            <FloatingCodeSnippet key={index} snippet={snippet} delay={index * 0.8} />
+          ))}
       </div>
 
       <div className="container px-4 md:px-6 z-20 relative h-full flex flex-col justify-center">
@@ -248,6 +255,7 @@ export function EnhancedHeroSection() {
                 {/* Navigation arrows */}
                 <button
                   onClick={prevImage}
+                  aria-label="Previous photo"
                   className={`absolute left-4 top-1/2 transform -translate-y-1/2 bg-maize/20 hover:bg-maize/40 text-maize p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${
                     isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
                   }`}
@@ -256,6 +264,7 @@ export function EnhancedHeroSection() {
                 </button>
                 <button
                   onClick={nextImage}
+                  aria-label="Next photo"
                   className={`absolute right-4 top-1/2 transform -translate-y-1/2 bg-maize/20 hover:bg-maize/40 text-maize p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${
                     isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
                   }`}
@@ -269,6 +278,8 @@ export function EnhancedHeroSection() {
                     <button
                       key={index}
                       onClick={() => goToImage(index)}
+                      aria-label={`Go to photo ${index + 1}: ${personalImages[index].title}`}
+                      aria-current={index === currentImageIndex}
                       className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-125 ${
                         index === currentImageIndex
                           ? "bg-maize shadow-lg shadow-maize/50"
@@ -298,8 +309,9 @@ export function EnhancedHeroSection() {
               </div>
 
               {/* Floating particles effect */}
-              <div className="absolute inset-0 pointer-events-none">
-                {[...Array(6)].map((_, i) => (
+              <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+                {mounted &&
+                  [...Array(6)].map((_, i) => (
                   <div
                     key={i}
                     className={`absolute w-1 h-1 bg-maize rounded-full animate-ping transition-opacity duration-500 ${

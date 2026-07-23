@@ -53,7 +53,7 @@ const projects: Project[] = [
       "A custom LLM-powered web scraper that automatically searches and filters internship opportunities across the internet based on personalized criteria.",
     techStack: ["Python", "OpenAI API", "Beautiful Soup", "Selenium", "Machine Learning", "Web Scraping"],
     imageUrl: "/images/Scrapper.jpg",
-    githubUrl: "https://github.com/kurieu-mx/Internship_scrapper",
+    githubUrl: "https://github.com/kurieu-mx/Internship_Agreggation_Platform",
     demoUrl: "#",
     category: "AI/ML",
     featured: true,
@@ -65,7 +65,7 @@ const projects: Project[] = [
       "A transformer-based language model built from scratch and specialized for diplomatic dialogue, debate, and resolution drafting. This custom LLM architecture is designed to understand and generate content for Model United Nations scenarios.",
     techStack: ["Python", "Transformers", "PyTorch", "NLP", "Machine Learning", "Diplomatic AI", "MUN"],
     imageUrl: "/images/mun.png",
-    githubUrl: "https://github.com/kurieu-mx/AdHoc-LM",
+    githubUrl: "https://github.com/kurieu-mx/AdHoc-GPT",
     category: "AI/ML",
     featured: true,
     status: "IN PROGRESS",
@@ -194,14 +194,14 @@ export function EnhancedProjectsSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-umich-blue-800/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                   <div className="flex gap-2">
                     {project.id !== 1 && (
-                      <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} source code on GitHub`}>
                         <Button size="sm" variant="secondary" className="bg-maize text-umich-blue-800 hover:bg-maize-600">
                           <GithubIcon className="h-4 w-4" />
                         </Button>
                       </Link>
                     )}
                     {project.demoUrl && project.id !== 3 && (
-                      <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                      <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo`}>
                         <Button
                           size="sm"
                           variant="secondary"

@@ -5,7 +5,9 @@ export function Footer() {
   return (
     <footer className="bg-dark-grey-950 text-white py-8 border-t border-dark-grey-700">
       <div className="container px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} My Portfolio. All rights reserved.</p>
+        <p className="text-sm text-gray-400">
+          &copy; {new Date().getFullYear()} Eugenio Kuri. Built with Next.js &amp; Tailwind CSS.
+        </p>
         <div className="flex gap-4">
           <Link
             href="https://github.com/kurieu-mx"

@@ -25,3 +25,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Windows "mark of the web" metadata
+*:Zone.Identifier

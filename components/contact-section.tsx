@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { GithubIcon, LinkedinIcon, MailIcon, SendIcon, CheckCircleIcon, LoaderIcon } from "lucide-react"
 
-// TODO(Eugenio): create a free form at https://formspree.io and paste your
-// endpoint here (e.g. "https://formspree.io/f/abcdwxyz"). Until it's set, the
-// form gracefully falls back to opening the visitor's email client.
-const FORMSPREE_ENDPOINT = ""
+// Set NEXT_PUBLIC_FORMSPREE_ENDPOINT (e.g. "https://formspree.io/f/abcdwxyz")
+// in your Vercel project env vars to deliver messages to your inbox. Until it's
+// set, the form gracefully falls back to opening the visitor's email client.
+const FORMSPREE_ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || ""
 const CONTACT_EMAIL = "kurieu@umich.edu"
 
 type Status = "idle" | "submitting" | "success" | "error"
@@ -165,7 +165,7 @@ export function ContactSection() {
                 <span>github.com/kurieu-mx</span>
               </a>
               <a
-                href="https://linkedin.com/in/kurieu"
+                href="https://www.linkedin.com/in/kurieu/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-gray-300 hover:text-maize transition-colors"

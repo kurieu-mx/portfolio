@@ -30,7 +30,7 @@ const projects: Project[] = [
       "Full-stack freelancing project for Francisco Iglesias Salon and Spa. Built and fine-tuned a custom LLM to assess hair damage and recommend personalized product combinations, achieving 15% increase in sales.",
     techStack: ["Custom LLMs", "Full Stack Development", "AI Integration", "Python", "Machine Learning"],
     imageUrl: "/images/Hair.png",
-    githubUrl: "#",
+    githubUrl: "https://github.com/kurieu-mx/ai-hair-consultation-platform",
     demoUrl: "https://v0-francisco-iglesias.vercel.app/",
     category: "Full Stack",
     featured: true,
@@ -54,7 +54,6 @@ const projects: Project[] = [
     techStack: ["Python", "OpenAI API", "Beautiful Soup", "Selenium", "Machine Learning", "Web Scraping"],
     imageUrl: "/images/Scrapper.jpg",
     githubUrl: "https://github.com/kurieu-mx/Internship_Agreggation_Platform",
-    demoUrl: "#",
     category: "AI/ML",
     featured: true,
   },
@@ -167,10 +166,18 @@ export function EnhancedProjectsSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
+          {filteredProjects.map((project, index) => {
+            const hasGithub = Boolean(project.githubUrl) && project.githubUrl !== "#"
+            const hasDemo = Boolean(project.demoUrl) && project.demoUrl !== "#"
+            const isPlaceholder = !hasGithub && !hasDemo
+            return (
             <Card
               key={project.id}
-              className="group flex flex-col overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 border-2 border-dark-grey-600 hover:border-maize/50 bg-dark-grey-900"
+              className={`group flex flex-col overflow-hidden shadow-lg transition-all duration-500 border-2 bg-dark-grey-900 ${
+                isPlaceholder
+                  ? "border-dashed border-dark-grey-600 opacity-70"
+                  : "border-dark-grey-600 hover:border-maize/50 hover:shadow-2xl hover:scale-105"
+              }`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="relative overflow-hidden">
@@ -179,7 +186,7 @@ export function EnhancedProjectsSection() {
                   alt={project.title}
                   width={600}
                   height={400}
-                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110 opacity-80"
+                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute top-2 right-2 flex gap-2">
                   {project.featured && (
@@ -193,14 +200,14 @@ export function EnhancedProjectsSection() {
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-umich-blue-800/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                   <div className="flex gap-2">
-                    {project.id !== 1 && (
+                    {hasGithub && (
                       <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} source code on GitHub`}>
                         <Button size="sm" variant="secondary" className="bg-maize text-umich-blue-800 hover:bg-maize-600">
                           <GithubIcon className="h-4 w-4" />
                         </Button>
                       </Link>
                     )}
-                    {project.demoUrl && project.id !== 3 && (
+                    {hasDemo && (
                       <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo`}>
                         <Button
                           size="sm"
@@ -236,27 +243,30 @@ export function EnhancedProjectsSection() {
                 </div>
               </CardContent>
 
-              <CardFooter className="flex justify-between gap-2">
-                {project.id !== 1 && (
-                  <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                    <Button
-                      variant="outline"
-                      className="w-full border-maize text-maize hover:bg-maize hover:text-umich-blue-800 transition-all duration-300 bg-transparent"
-                    >
-                      <GithubIcon className="h-4 w-4 mr-2" /> Code
-                    </Button>
-                  </Link>
-                )}
-                {project.demoUrl && project.id !== 3 && (
-                  <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                    <Button className="w-full bg-maize text-umich-blue-800 hover:bg-maize-600 transition-all duration-300">
-                      <ExternalLinkIcon className="h-4 w-4 mr-2" /> Demo
-                    </Button>
-                  </Link>
-                )}
-              </CardFooter>
+              {(hasGithub || hasDemo) && (
+                <CardFooter className="flex justify-between gap-2">
+                  {hasGithub && (
+                    <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                      <Button
+                        variant="outline"
+                        className="w-full border-maize text-maize hover:bg-maize hover:text-umich-blue-800 transition-all duration-300 bg-transparent"
+                      >
+                        <GithubIcon className="h-4 w-4 mr-2" /> Code
+                      </Button>
+                    </Link>
+                  )}
+                  {hasDemo && (
+                    <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                      <Button className="w-full bg-maize text-umich-blue-800 hover:bg-maize-600 transition-all duration-300">
+                        <ExternalLinkIcon className="h-4 w-4 mr-2" /> Demo
+                      </Button>
+                    </Link>
+                  )}
+                </CardFooter>
+              )}
             </Card>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

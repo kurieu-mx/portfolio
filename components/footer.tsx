@@ -19,7 +19,7 @@ export function Footer() {
             <span className="sr-only">GitHub</span>
           </Link>
           <Link
-            href="https://linkedin.com/in/kurieu"
+            href="https://www.linkedin.com/in/kurieu/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-maize transition-colors duration-300"

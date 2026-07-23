@@ -57,7 +57,7 @@ const jsonLd = {
     name: "University of Michigan",
   },
   knowsAbout: ["Machine Learning", "Large Language Models", "Computer Vision", "Full-Stack Development"],
-  sameAs: ["https://github.com/kurieu-mx", "https://linkedin.com/in/kurieu"],
+  sameAs: ["https://github.com/kurieu-mx", "https://www.linkedin.com/in/kurieu/"],
 }
 
 export default function RootLayout({

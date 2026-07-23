@@ -75,3 +75,15 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-maize-600;
 }
+
+/* Firefox scrollbar */
+html {
+  scrollbar-color: #ffcb05 #1f2229;
+  scrollbar-width: thin;
+}
+
+/* Maize text-selection highlight */
+::selection {
+  background-color: #ffcb05;
+  color: #00274c;
+}

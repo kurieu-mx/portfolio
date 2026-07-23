@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -68,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth dark">
-      <body className={`${inter.className} bg-dark-grey-900 text-white min-h-screen`}>
+      <body className={`${inter.className} ${GeistMono.variable} bg-dark-grey-900 text-white min-h-screen`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         {children}
       </body>

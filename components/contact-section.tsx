@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { GithubIcon, LinkedinIcon, MailIcon, SendIcon, CheckCircleIcon, LoaderIcon } from "lucide-react"
+import { SectionHeading } from "@/components/section-heading"
 
 // Set NEXT_PUBLIC_FORMSPREE_ENDPOINT (e.g. "https://formspree.io/f/abcdwxyz")
 // in your Vercel project env vars to deliver messages to your inbox. Until it's
@@ -52,13 +53,12 @@ export function ContactSection() {
   return (
     <section id="contact" className="py-16 md:py-24 bg-dark-grey-800">
       <div className="container px-4 md:px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-maize">Let&apos;s Build Something</h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Open to internships, research, and collaborations in AI, computer vision, and data. Drop me a message —
-            I&apos;ll get back to you.
-          </p>
-        </div>
+        <SectionHeading
+          index="06"
+          eyebrow="UPLINK"
+          title="Establish Contact"
+          subtitle="Open to internships, research, and collaborations in robotics, autonomous systems, and AI. Drop me a message — I'll get back to you."
+        />
 
         <div className="grid lg:grid-cols-5 gap-8 max-w-4xl mx-auto">
           <Card className="lg:col-span-3 shadow-lg border-2 border-dark-grey-600 bg-dark-grey-900">

@@ -4,6 +4,7 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, LabelList } from "rec
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { SectionHeading } from "@/components/section-heading"
 
 const skillsData = [
   { name: "Python", level: 92, fill: "#FFCB05" },
@@ -38,15 +39,12 @@ export function AboutMeSection() {
   return (
     <section id="about" className="py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
-        <div className="text-center mb-12">
-          <p className="text-maize/70 font-medium tracking-widest uppercase text-sm">Get to know me</p>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 bg-gradient-to-r from-maize to-maize-300 bg-clip-text text-transparent">
-            About Me
-          </h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto mt-4">
-            Robotics &amp; software engineer who likes hard systems problems — and shipping them.
-          </p>
-        </div>
+        <SectionHeading
+          index="02"
+          eyebrow="PROFILE"
+          title="About Me"
+          subtitle="Robotics & software engineer who likes hard systems problems — and shipping them."
+        />
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">

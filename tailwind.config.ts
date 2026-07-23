@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -128,15 +131,20 @@ const config = {
           },
         },
         blink: {
-          "50%": {
-            borderColor: "transparent",
-          },
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
+        "fade-in-up": {
+          from: { opacity: "0", transform: "translateY(16px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        typing: "typing 3.5s steps(40, end), blink .75s step-end infinite",
+        typing: "typing 3.5s steps(40, end)",
+        blink: "blink 1s step-end infinite",
+        "fade-in-up": "fade-in-up 0.6s ease-out both",
       },
     },
   },

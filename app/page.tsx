@@ -1,5 +1,6 @@
-import { EnhancedHeroSection } from "@/components/enhanced-hero-section"
+import { SwarmHero } from "@/components/swarm-hero"
 import { EnhancedProjectsSection } from "@/components/enhanced-projects-section"
+import { SectionHeading } from "@/components/section-heading"
 import { AboutMeSection } from "@/components/about-me-section"
 import { TechStackShowcase } from "@/components/tech-stack-showcase"
 import { ResumeSection } from "@/components/resume-section"
@@ -16,7 +17,7 @@ export default function HomePage() {
       <GlowMenu />
       <MobileGlowMenu />
       <main className="flex-1">
-        <EnhancedHeroSection />
+        <SwarmHero />
 
         <FadeInSection>
           <EnhancedProjectsSection />
@@ -33,12 +34,12 @@ export default function HomePage() {
         <FadeInSection>
           <section id="resume" className="py-16 md:py-24 bg-dark-grey-800">
             <div className="container px-4 md:px-6">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-maize">Professional Timeline</h2>
-                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                  My journey through education and professional experience, click on any item to learn more.
-                </p>
-              </div>
+              <SectionHeading
+                index="04"
+                eyebrow="FLIGHT LOG"
+                title="Professional Timeline"
+                subtitle="My journey through work, projects, and education — tap any entry to expand."
+              />
               <InteractiveTimeline />
             </div>
           </section>

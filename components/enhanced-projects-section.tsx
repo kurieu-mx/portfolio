@@ -8,6 +8,7 @@ import Link from "next/link"
 import { GithubIcon, ExternalLinkIcon, FilterIcon } from "lucide-react"
 import { useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { SectionHeading } from "@/components/section-heading"
 
 interface Project {
   id: number
@@ -108,15 +109,12 @@ export function EnhancedProjectsSection() {
   return (
     <section id="projects" className="py-16 md:py-24 bg-dark-grey-800">
       <div className="container px-4 md:px-6">
-        <div className="text-center mb-12">
-          <p className="text-maize/70 font-medium tracking-widest uppercase text-sm">Selected Work</p>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 bg-gradient-to-r from-maize to-maize-300 bg-clip-text text-transparent">
-            Projects
-          </h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto mt-4">
-            From autonomous robotics and computer vision to full-stack AI applications.
-          </p>
-        </div>
+        <SectionHeading
+          index="01"
+          eyebrow="MISSIONS"
+          title="Projects"
+          subtitle="From autonomous robotics and computer vision to full-stack AI applications."
+        />
 
         {/* Filter and sort controls */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center items-center">

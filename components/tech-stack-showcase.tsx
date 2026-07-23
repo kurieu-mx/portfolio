@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { SectionHeading } from "@/components/section-heading"
 
 interface Tech {
   name: string
@@ -36,12 +37,7 @@ export function TechStackShowcase() {
   return (
     <div className="py-16 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
-        <div className="text-center mb-10">
-          <p className="text-maize/70 font-medium tracking-widest uppercase text-sm">My Toolbox</p>
-          <h3 className="text-3xl md:text-4xl font-bold mt-2 bg-gradient-to-r from-maize to-maize-300 bg-clip-text text-transparent">
-            Technologies I Work With
-          </h3>
-        </div>
+        <SectionHeading index="03" eyebrow="STACK" title="Toolbox" subtitle="The technologies I build with day to day." />
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 max-w-4xl mx-auto">
           {technologies.map((tech) => {
             const isActive = hoveredTech === tech.name

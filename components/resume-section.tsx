@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { DownloadIcon } from "lucide-react"
+import { SectionHeading } from "@/components/section-heading"
 
 const RESUME_PATH = "/Eugenio-Kuri-Resume.pdf"
 
@@ -62,12 +63,7 @@ export function ResumeSection() {
   return (
     <section id="resume-download" className="py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
-        <div className="text-center mb-12">
-          <p className="text-maize/70 font-medium tracking-widest uppercase text-sm">Experience</p>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 bg-gradient-to-r from-maize to-maize-300 bg-clip-text text-transparent">
-            Resume
-          </h2>
-        </div>
+        <SectionHeading index="05" eyebrow="DOSSIER" title="Resume" subtitle="Experience, skills, and the one-page PDF." />
 
         <div className="max-w-3xl mx-auto space-y-8">
           <Card className="shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">

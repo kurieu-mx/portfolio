@@ -105,7 +105,9 @@ export function InteractiveTimeline() {
 
   return (
     <div className="relative">
-      <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-gradient-to-b from-maize to-umich-blue"></div>
+      <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-gradient-to-b from-maize/60 to-umich-blue"></div>
+      <div className="timeline-pulse pointer-events-none absolute left-4 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 w-1 h-24 bg-gradient-to-b from-transparent via-maize to-transparent blur-[1px]" />
+
 
       <div className="space-y-8">
         {timelineData.map((item, index) => (
@@ -114,7 +116,7 @@ export function InteractiveTimeline() {
             className={`relative flex items-center ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
           >
             {/* Timeline dot */}
-            <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 bg-maize rounded-full border-4 border-umich-blue shadow-lg z-10"></div>
+            <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 bg-maize rounded-full border-4 border-umich-blue shadow-[0_0_14px_rgba(255,203,5,0.7)] z-10"></div>
 
             {/* Content card */}
             <div className={`ml-12 md:ml-0 md:w-1/2 ${index % 2 === 0 ? "md:pr-8" : "md:pl-8"}`}>

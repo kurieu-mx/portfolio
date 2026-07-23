@@ -9,6 +9,7 @@ import { GithubIcon, ExternalLinkIcon, FilterIcon } from "lucide-react"
 import { useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SectionHeading } from "@/components/section-heading"
+import { SectionFX } from "@/components/section-fx"
 
 interface Project {
   id: number
@@ -108,6 +109,7 @@ export function EnhancedProjectsSection() {
 
   return (
     <section id="projects" className="hud-grid py-16 md:py-24 bg-dark-grey-800">
+      <SectionFX variant="radar" />
       <div className="container px-4 md:px-6">
         <SectionHeading
           index="01"

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { GithubIcon, LinkedinIcon, MailIcon, SendIcon, CheckCircleIcon, LoaderIcon } from "lucide-react"
 import { SectionHeading } from "@/components/section-heading"
+import { SectionFX } from "@/components/section-fx"
 
 // Set NEXT_PUBLIC_FORMSPREE_ENDPOINT (e.g. "https://formspree.io/f/abcdwxyz")
 // in your Vercel project env vars to deliver messages to your inbox. Until it's
@@ -52,6 +53,7 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="hud-grid py-16 md:py-24 bg-dark-grey-800">
+      <SectionFX variant="signal" />
       <div className="container px-4 md:px-6">
         <SectionHeading
           index="06"

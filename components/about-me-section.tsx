@@ -5,6 +5,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { SectionHeading } from "@/components/section-heading"
+import { SectionFX } from "@/components/section-fx"
 
 const skillsData = [
   { name: "Python", level: 92, fill: "#FFCB05" },
@@ -38,6 +39,7 @@ const coursework = [
 export function AboutMeSection() {
   return (
     <section id="about" className="hud-grid py-16 md:py-24 bg-dark-grey-900">
+      <SectionFX variant="constellation" />
       <div className="container px-4 md:px-6">
         <SectionHeading
           index="02"

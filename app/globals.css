@@ -150,6 +150,27 @@ html {
   );
 }
 
+/* Timeline traveling pulse */
+@keyframes timeline-pulse {
+  0% {
+    top: -12%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+.timeline-pulse {
+  animation: timeline-pulse 5s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

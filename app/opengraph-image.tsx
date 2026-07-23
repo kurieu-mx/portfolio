@@ -1,5 +1,9 @@
 import { ImageResponse } from "next/og"
 
+// Generate on-demand at the edge (the documented, most reliable runtime for
+// next/og) instead of during the build, so it never blocks a deployment.
+export const runtime = "edge"
+
 export const alt = "Eugenio Kuri — Data Science & AI"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"

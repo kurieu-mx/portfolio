@@ -171,6 +171,31 @@ html {
   animation: timeline-pulse 5s linear infinite;
 }
 
+/* Radar sweep for the project selector */
+@keyframes radar-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.radar-sweep {
+  animation: radar-sweep 4s linear infinite;
+}
+
+/* Briefing "decode" scan bar (one-shot on selection) */
+@keyframes briefing-scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(900%);
+    opacity: 0;
+  }
+}
+.briefing-scan {
+  animation: briefing-scan 0.8s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

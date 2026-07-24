@@ -4,10 +4,15 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
-import { GithubIcon, ExternalLinkIcon, ChevronRightIcon } from "lucide-react"
+import { GithubIcon, ExternalLinkIcon, ChevronRightIcon, LockIcon, MailIcon, LinkedinIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 import { SectionHeading } from "@/components/section-heading"
 import { SectionFX } from "@/components/section-fx"
+
+const LINKEDIN = "https://www.linkedin.com/in/kurieu/"
+const EMAIL = "kurieu@umich.edu"
+
+type Status = "DEPLOYED" | "ACTIVE" | "CLASSIFIED"
 
 interface Project {
   id: number
@@ -20,8 +25,11 @@ interface Project {
   githubUrl?: string
   demoUrl?: string
   category: string
-  status: "DEPLOYED" | "ACTIVE" | "CLASSIFIED"
+  status: Status
+  org: string
   role: string
+  timeframe: string
+  proprietary?: boolean
 }
 
 const projects: Project[] = [
@@ -34,8 +42,11 @@ const projects: Project[] = [
     techStack: ["Go", "ROS 2", "PX4", "MAVLink", "LiDAR", "Gazebo", "YOLO"],
     icon: "🚁",
     category: "Robotics",
-    status: "ACTIVE",
-    role: "Software Engineer · Merlin Drones",
+    status: "CLASSIFIED",
+    org: "Merlin Drones",
+    role: "Software Engineer",
+    timeframe: "2026",
+    proprietary: true,
   },
   {
     id: 2,
@@ -49,19 +60,24 @@ const projects: Project[] = [
     demoUrl: "https://v0-francisco-iglesias.vercel.app/",
     category: "Full Stack",
     status: "DEPLOYED",
+    org: "Francisco Iglesias Salon & Spa",
     role: "Full-Stack Freelance",
+    timeframe: "2025",
   },
   {
     id: 3,
     code: "M-03",
     title: "AI Bookkeeping Platform",
     description:
-      "An automated bookkeeping platform at Embedding Labs that turns invoices and bank statements into double-entry journal entries, with LLM-assisted onboarding and Firestore/BigQuery/OpenAI pipelines.",
+      "An automated bookkeeping platform that turns invoices and bank statements into double-entry journal entries, with LLM-assisted client onboarding and Firestore / BigQuery / OpenAI pipelines. Scaled the product past its early customer limit.",
     techStack: ["Python", "Next.js", "BigQuery", "Firestore", "OpenAI API"],
     icon: "📒",
     category: "AI/ML",
-    status: "DEPLOYED",
-    role: "Software Engineer · Embedding Labs",
+    status: "CLASSIFIED",
+    org: "Embedding Labs",
+    role: "Software Engineer",
+    timeframe: "2025",
+    proprietary: true,
   },
   {
     id: 4,
@@ -74,7 +90,9 @@ const projects: Project[] = [
     githubUrl: "https://github.com/kurieu-mx/AdHoc-GPT",
     category: "AI/ML",
     status: "ACTIVE",
-    role: "Independent Research",
+    org: "Independent Research",
+    role: "Solo build",
+    timeframe: "2025",
   },
   {
     id: 5,
@@ -87,7 +105,9 @@ const projects: Project[] = [
     githubUrl: "https://github.com/kurieu-mx/wakey_wakey",
     category: "Robotics",
     status: "DEPLOYED",
-    role: "U-Michigan Robotics",
+    org: "U-Michigan Robotics",
+    role: "Team project",
+    timeframe: "2025",
   },
   {
     id: 6,
@@ -100,30 +120,44 @@ const projects: Project[] = [
     githubUrl: "https://github.com/kurieu-mx/Internship_Agreggation_Platform",
     category: "AI/ML",
     status: "DEPLOYED",
-    role: "Independent Project",
+    org: "Independent Project",
+    role: "Solo build",
+    timeframe: "2025",
   },
 ]
 
 const categories = ["All", "Robotics", "AI/ML", "Full Stack"]
 
-const statusColor: Record<Project["status"], string> = {
+const statusColor: Record<Status, string> = {
   DEPLOYED: "text-emerald-400",
   ACTIVE: "text-amber-400",
   CLASSIFIED: "text-sky-400",
+}
+
+function Readout({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col">
+      <span className="font-mono text-[9px] tracking-widest text-gray-500">{label}</span>
+      <span className="text-sm text-gray-200">{value}</span>
+    </div>
+  )
 }
 
 export function EnhancedProjectsSection() {
   const [category, setCategory] = useState("All")
   const [selectedId, setSelectedId] = useState(1)
 
-  const list = useMemo(
-    () => projects.filter((p) => category === "All" || p.category === category),
-    [category],
-  )
+  const list = useMemo(() => projects.filter((p) => category === "All" || p.category === category), [category])
   const selected = list.find((p) => p.id === selectedId) ?? list[0]
 
   const hasGithub = Boolean(selected?.githubUrl) && selected?.githubUrl !== "#"
   const hasDemo = Boolean(selected?.demoUrl) && selected?.demoUrl !== "#"
+
+  const briefingMailto = selected
+    ? `mailto:${EMAIL}?subject=${encodeURIComponent(`Briefing request — ${selected.title}`)}&body=${encodeURIComponent(
+        `Hi Eugenio, I'd love to hear more about your work on ${selected.title} at ${selected.org}.`,
+      )}`
+    : `mailto:${EMAIL}`
 
   return (
     <section id="projects" className="hud-grid py-16 md:py-24 bg-dark-grey-800">
@@ -131,9 +165,9 @@ export function EnhancedProjectsSection() {
       <div className="container relative px-4 md:px-6">
         <SectionHeading
           index="01"
-          eyebrow="MISSIONS"
+          eyebrow="MY WORK"
           title="Mission Log"
-          subtitle="Select a mission to open its briefing."
+          subtitle="Projects I've built — open-source work plus proprietary systems from my roles at companies. Select a mission for the briefing."
         />
 
         {/* Category filter */}
@@ -156,9 +190,9 @@ export function EnhancedProjectsSection() {
 
         <div className="grid lg:grid-cols-[minmax(0,340px)_1fr] gap-6">
           {/* Mission list */}
-          <div className="hud-panel border border-maize/25 bg-black/40 backdrop-blur-sm">
+          <div className="hud-panel border border-maize/25 bg-black/40 backdrop-blur-sm self-start">
             <div className="flex items-center justify-between px-4 py-3 border-b border-maize/15 font-mono text-[10px] tracking-widest text-maize/70">
-              <span>SELECT MISSION</span>
+              <span>MISSIONS · E. KURI</span>
               <span>{list.length} FOUND</span>
             </div>
             <ul>
@@ -170,9 +204,7 @@ export function EnhancedProjectsSection() {
                       onClick={() => setSelectedId(p.id)}
                       aria-current={active}
                       className={`group w-full text-left flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
-                        active
-                          ? "border-maize bg-maize/10"
-                          : "border-transparent hover:border-maize/40 hover:bg-white/5"
+                        active ? "border-maize bg-maize/10" : "border-transparent hover:border-maize/40 hover:bg-white/5"
                       }`}
                     >
                       <span className="font-mono text-xs text-maize/60">{p.code}</span>
@@ -180,14 +212,14 @@ export function EnhancedProjectsSection() {
                         <span className={`block truncate font-semibold ${active ? "text-maize" : "text-gray-200"}`}>
                           {p.title}
                         </span>
-                        <span className="block font-mono text-[10px] tracking-wide text-gray-500">
-                          {p.category.toUpperCase()}
+                        <span className="block font-mono text-[10px] tracking-wide text-gray-500 truncate">
+                          {p.org.toUpperCase()}
                         </span>
                       </span>
-                      <span className={`font-mono text-[9px] ${statusColor[p.status]}`}>● {p.status}</span>
+                      {p.proprietary && <LockIcon className="h-3 w-3 shrink-0 text-sky-400/80" />}
                       <ChevronRightIcon
                         className={`h-4 w-4 shrink-0 transition-transform ${
-                          active ? "text-maize translate-x-0" : "text-gray-600 group-hover:translate-x-0.5"
+                          active ? "text-maize" : "text-gray-600 group-hover:translate-x-0.5"
                         }`}
                       />
                     </button>
@@ -199,7 +231,10 @@ export function EnhancedProjectsSection() {
 
           {/* Briefing panel */}
           {selected && (
-            <div key={selected.id} className="hud-panel animate-fade-in-up border border-maize/25 bg-dark-grey-900/70 backdrop-blur-sm flex flex-col">
+            <div
+              key={selected.id}
+              className="hud-panel animate-fade-in-up border border-maize/25 bg-dark-grey-900/70 backdrop-blur-sm flex flex-col"
+            >
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-maize/15 font-mono text-[10px] tracking-widest text-maize/70">
                 <span>BRIEFING // {selected.code}</span>
                 <span className={statusColor[selected.status]}>● {selected.status}</span>
@@ -207,13 +242,7 @@ export function EnhancedProjectsSection() {
 
               <div className="relative h-44 sm:h-52 overflow-hidden border-b border-maize/10">
                 {selected.imageUrl ? (
-                  <Image
-                    src={selected.imageUrl}
-                    alt={selected.title}
-                    width={900}
-                    height={500}
-                    className="h-full w-full object-cover"
-                  />
+                  <Image src={selected.imageUrl} alt={selected.title} width={900} height={500} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-umich-blue via-dark-grey-800 to-dark-grey-950">
                     <span className="text-7xl" aria-hidden="true">
@@ -222,13 +251,26 @@ export function EnhancedProjectsSection() {
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-grey-900 via-transparent to-transparent" />
+                {selected.proprietary && (
+                  <span className="absolute top-3 left-3 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-sky-300 bg-black/60 border border-sky-400/40 px-2 py-1">
+                    <LockIcon className="h-3 w-3" /> PROPRIETARY
+                  </span>
+                )}
               </div>
 
               <div className="p-5 md:p-6 flex flex-col gap-4 flex-1">
                 <div>
-                  <p className="font-mono text-[11px] tracking-widest text-maize/60">{selected.role}</p>
-                  <h3 className="text-2xl md:text-3xl font-bold text-maize mt-1">{selected.title}</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-maize">{selected.title}</h3>
                 </div>
+
+                {/* Readout grid — makes it clear this is real work, and where */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border-y border-dark-grey-600 py-3">
+                  <Readout label="ORG" value={selected.org} />
+                  <Readout label="ROLE" value={selected.role} />
+                  <Readout label="TIMEFRAME" value={selected.timeframe} />
+                  <Readout label="STATUS" value={selected.status} />
+                </div>
+
                 <p className="text-gray-300 leading-relaxed">{selected.description}</p>
 
                 <div>
@@ -242,27 +284,50 @@ export function EnhancedProjectsSection() {
                   </div>
                 </div>
 
-                {(hasGithub || hasDemo) && (
-                  <div className="flex flex-wrap gap-3 pt-1 mt-auto">
-                    {hasGithub && (
-                      <Link href={selected.githubUrl!} target="_blank" rel="noopener noreferrer">
-                        <Button
-                          variant="outline"
-                          className="rounded-none border-maize text-maize hover:bg-maize hover:text-umich-blue-800 bg-transparent"
-                        >
-                          <GithubIcon className="h-4 w-4 mr-2" /> View Code
-                        </Button>
-                      </Link>
-                    )}
-                    {hasDemo && (
-                      <Link href={selected.demoUrl!} target="_blank" rel="noopener noreferrer">
-                        <Button className="rounded-none bg-maize text-umich-blue-800 hover:bg-maize-600">
-                          <ExternalLinkIcon className="h-4 w-4 mr-2" /> Live Demo
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                )}
+                <div className="pt-1 mt-auto">
+                  {selected.proprietary ? (
+                    <div className="space-y-3">
+                      <p className="text-sm text-gray-400 flex items-start gap-2">
+                        <LockIcon className="h-4 w-4 mt-0.5 shrink-0 text-sky-400" />
+                        <span>
+                          Built as part of my work at{" "}
+                          <span className="text-gray-200 font-medium">{selected.org}</span>. The source is under NDA —
+                          but I&apos;m happy to walk through the architecture and exactly what I built. Reach out for a
+                          briefing.
+                        </span>
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        <Link href={briefingMailto}>
+                          <Button className="rounded-none bg-maize text-umich-blue-800 hover:bg-maize-600">
+                            <MailIcon className="h-4 w-4 mr-2" /> Request a Briefing
+                          </Button>
+                        </Link>
+                        <Link href={LINKEDIN} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" className="rounded-none border-maize text-maize hover:bg-maize hover:text-umich-blue-800 bg-transparent">
+                            <LinkedinIcon className="h-4 w-4 mr-2" /> DM on LinkedIn
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-3">
+                      {hasGithub && (
+                        <Link href={selected.githubUrl!} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" className="rounded-none border-maize text-maize hover:bg-maize hover:text-umich-blue-800 bg-transparent">
+                            <GithubIcon className="h-4 w-4 mr-2" /> View Code
+                          </Button>
+                        </Link>
+                      )}
+                      {hasDemo && (
+                        <Link href={selected.demoUrl!} target="_blank" rel="noopener noreferrer">
+                          <Button className="rounded-none bg-maize text-umich-blue-800 hover:bg-maize-600">
+                            <ExternalLinkIcon className="h-4 w-4 mr-2" /> Live Demo
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}

@@ -112,7 +112,7 @@ const projects: Project[] = [
   {
     id: 6,
     code: "M-06",
-    title: "AI Internship Scraper",
+    title: "Internship Aggregation Platform",
     description:
       "An LLM-powered ETL pipeline that filters ~15k community-sourced postings into a clean dataset of active US tech internships, with local-LLM classification and Google Sheets sync via GitHub Actions.",
     techStack: ["Python", "ETL", "Ollama", "Web Scraping", "GitHub Actions"],

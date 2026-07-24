@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
-import { GithubIcon, ExternalLinkIcon, LockIcon, MailIcon, LinkedinIcon } from "lucide-react"
+import { GithubIcon, ExternalLinkIcon, LockIcon, MailIcon, LinkedinIcon, ChevronRightIcon } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { SectionHeading } from "@/components/section-heading"
 import { SectionFX } from "@/components/section-fx"
@@ -139,14 +139,6 @@ const statusDot: Record<Status, string> = {
   CLASSIFIED: "bg-sky-400",
 }
 
-// Stable radar coordinates per project (percent within the square)
-const radarPos = projects.map((_, i) => {
-  const ang = ((i * 60 - 90) * Math.PI) / 180
-  const rad = i % 2 === 0 ? 0.68 : 0.42
-  return { x: 50 + Math.cos(ang) * rad * 50, y: 50 + Math.sin(ang) * rad * 50 }
-})
-const posFor = (id: number) => radarPos[projects.findIndex((p) => p.id === id)]
-
 const SCRAMBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>#*"
 
 function DecodedText({ text }: { text: string }) {
@@ -182,6 +174,24 @@ function Readout({ label, value }: { label: string; value: string }) {
   )
 }
 
+function Thumb({ project, active }: { project: Project; active: boolean }) {
+  return (
+    <div
+      className={`relative h-14 w-14 shrink-0 overflow-hidden rounded border ${
+        active ? "border-maize/60" : "border-dark-grey-600"
+      }`}
+    >
+      {project.imageUrl ? (
+        <Image src={project.imageUrl} alt="" width={112} height={112} className="h-full w-full object-cover" />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-umich-blue to-dark-grey-950 text-2xl">
+          {project.icon}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function EnhancedProjectsSection() {
   const [category, setCategory] = useState("All")
   const [selectedId, setSelectedId] = useState(1)
@@ -205,8 +215,8 @@ export function EnhancedProjectsSection() {
         <SectionHeading
           index="01"
           eyebrow="MY WORK"
-          title="Mission Log"
-          subtitle="Projects I've built — open-source work plus proprietary systems from my roles at companies. Tap a contact on the radar to open its briefing."
+          title="Projects"
+          subtitle="Real projects I've built — open-source work plus proprietary systems from my roles at companies. Click any project to open its briefing."
         />
 
         {/* Category filter */}
@@ -227,73 +237,49 @@ export function EnhancedProjectsSection() {
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-[minmax(0,360px)_1fr] gap-8">
-          {/* Radar selector */}
-          <div className="self-start">
-            <div className="relative mx-auto aspect-square w-full max-w-[360px]">
-              {/* rings */}
-              <div className="absolute inset-0 rounded-full border border-maize/20" />
-              <div className="absolute inset-[16%] rounded-full border border-maize/15" />
-              <div className="absolute inset-[33%] rounded-full border border-maize/12" />
-              <div className="absolute inset-[50%] rounded-full border border-maize/10" />
-              <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-maize/10" />
-              <div className="absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 bg-maize/10" />
-              {/* sweep */}
-              <div
-                className="radar-sweep pointer-events-none absolute inset-0 rounded-full"
-                style={{ background: "conic-gradient(from 0deg, rgba(255,203,5,0.20), transparent 38%)" }}
-                aria-hidden="true"
-              />
-              {/* center */}
-              <div className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-maize" />
-
-              {/* blips */}
+        <div className="grid lg:grid-cols-[minmax(0,380px)_1fr] gap-6">
+          {/* Project list */}
+          <div className="hud-panel border border-maize/25 bg-black/40 backdrop-blur-sm self-start">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-maize/15 font-mono text-[10px] tracking-widest text-maize/70">
+              <span>SELECT A PROJECT</span>
+              <span>{list.length} SHOWN</span>
+            </div>
+            <ul className="divide-y divide-dark-grey-700/60">
               {list.map((p) => {
-                const pos = posFor(p.id)
                 const active = selected?.id === p.id
                 return (
-                  <button
-                    key={p.id}
-                    onClick={() => setSelectedId(p.id)}
-                    aria-current={active}
-                    aria-label={`${p.title} — ${p.org}, ${p.status}`}
-                    title={`${p.code} · ${p.title}`}
-                    className="group absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5"
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-                  >
-                    <span className="relative flex h-3 w-3 items-center justify-center">
-                      {active && (
-                        <span className={`absolute h-3 w-3 rounded-full ${statusDot[p.status]} opacity-60 animate-ping`} />
-                      )}
-                      <span
-                        className={`relative rounded-full transition-all ${statusDot[p.status]} ${
-                          active
-                            ? "h-3 w-3 ring-2 ring-maize ring-offset-2 ring-offset-dark-grey-800"
-                            : "h-2 w-2 opacity-70 group-hover:opacity-100 group-hover:scale-125"
-                        }`}
-                      />
-                    </span>
-                    <span
-                      className={`font-mono text-[9px] tracking-wide whitespace-nowrap transition-colors ${
-                        active ? "text-maize" : "text-maize/50 group-hover:text-maize"
+                  <li key={p.id}>
+                    <button
+                      onClick={() => setSelectedId(p.id)}
+                      aria-current={active}
+                      className={`group flex w-full items-center gap-3 px-3 py-3 text-left transition-colors ${
+                        active ? "bg-maize/10" : "hover:bg-white/5"
                       }`}
                     >
-                      {p.code}
-                    </span>
-                  </button>
+                      <Thumb project={p} active={active} />
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-2">
+                          <span className={`h-2 w-2 shrink-0 rounded-full ${statusDot[p.status]}`} />
+                          <span className={`truncate font-semibold ${active ? "text-maize" : "text-gray-100"}`}>
+                            {p.title}
+                          </span>
+                          {p.proprietary && <LockIcon className="h-3 w-3 shrink-0 text-sky-400/80" />}
+                        </span>
+                        <span className="mt-0.5 block truncate text-xs text-gray-400">{p.org}</span>
+                        <span className="mt-0.5 block font-mono text-[10px] tracking-wide text-gray-500">
+                          {p.category.toUpperCase()} · {p.timeframe}
+                        </span>
+                      </span>
+                      <ChevronRightIcon
+                        className={`h-5 w-5 shrink-0 transition-transform ${
+                          active ? "text-maize" : "text-gray-600 group-hover:translate-x-0.5 group-hover:text-maize"
+                        }`}
+                      />
+                    </button>
+                  </li>
                 )
               })}
-            </div>
-
-            {/* caption */}
-            {selected && (
-              <p className="mt-4 text-center font-mono text-xs text-maize">
-                ▸ {selected.code} · {selected.title}
-                <span className="block text-[10px] text-gray-500 mt-1">
-                  {list.length} CONTACT{list.length === 1 ? "" : "S"} ON SCOPE
-                </span>
-              </p>
-            )}
+            </ul>
           </div>
 
           {/* Briefing panel */}
@@ -302,7 +288,6 @@ export function EnhancedProjectsSection() {
               key={selected.id}
               className="hud-panel animate-fade-in-up relative overflow-hidden border border-maize/25 bg-dark-grey-900/70 backdrop-blur-sm flex flex-col"
             >
-              {/* decode scan bar */}
               <div className="briefing-scan pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-maize/25 to-transparent" />
 
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-maize/15 font-mono text-[10px] tracking-widest text-maize/70">

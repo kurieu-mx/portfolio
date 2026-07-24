@@ -133,13 +133,7 @@ const statusColor: Record<Status, string> = {
   ACTIVE: "text-amber-400",
   CLASSIFIED: "text-sky-400",
 }
-const statusDot: Record<Status, string> = {
-  DEPLOYED: "bg-emerald-400",
-  ACTIVE: "bg-amber-400",
-  CLASSIFIED: "bg-sky-400",
-}
-
-const SCRAMBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>#*"
+const SCRAMBLE ="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>#*"
 
 function DecodedText({ text }: { text: string }) {
   const [display, setDisplay] = useState(text)
@@ -170,24 +164,6 @@ function Readout({ label, value }: { label: string; value: string }) {
     <div className="flex flex-col">
       <span className="font-mono text-[9px] tracking-widest text-gray-500">{label}</span>
       <span className="text-sm text-gray-200">{value}</span>
-    </div>
-  )
-}
-
-function Thumb({ project, active }: { project: Project; active: boolean }) {
-  return (
-    <div
-      className={`relative h-14 w-14 shrink-0 overflow-hidden rounded border ${
-        active ? "border-maize/60" : "border-dark-grey-600"
-      }`}
-    >
-      {project.imageUrl ? (
-        <Image src={project.imageUrl} alt="" width={112} height={112} className="h-full w-full object-cover" />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-umich-blue to-dark-grey-950 text-2xl">
-          {project.icon}
-        </div>
-      )}
     </div>
   )
 }
@@ -241,10 +217,10 @@ export function EnhancedProjectsSection() {
           {/* Project list */}
           <div className="hud-panel border border-maize/25 bg-black/40 backdrop-blur-sm self-start">
             <div className="flex items-center justify-between px-4 py-3 border-b border-maize/15 font-mono text-[10px] tracking-widest text-maize/70">
-              <span>SELECT A PROJECT</span>
-              <span>{list.length} SHOWN</span>
+              <span>MISSIONS · E. KURI</span>
+              <span>{list.length} FOUND</span>
             </div>
-            <ul className="divide-y divide-dark-grey-700/60">
+            <ul>
               {list.map((p) => {
                 const active = selected?.id === p.id
                 return (
@@ -252,27 +228,23 @@ export function EnhancedProjectsSection() {
                     <button
                       onClick={() => setSelectedId(p.id)}
                       aria-current={active}
-                      className={`group flex w-full items-center gap-3 px-3 py-3 text-left transition-colors ${
-                        active ? "bg-maize/10" : "hover:bg-white/5"
+                      className={`group w-full text-left flex items-center gap-3 px-4 py-3 border-l-2 transition-all ${
+                        active ? "border-maize bg-maize/10" : "border-transparent hover:border-maize/40 hover:bg-white/5"
                       }`}
                     >
-                      <Thumb project={p} active={active} />
-                      <span className="min-w-0 flex-1">
-                        <span className="flex items-center gap-2">
-                          <span className={`h-2 w-2 shrink-0 rounded-full ${statusDot[p.status]}`} />
-                          <span className={`truncate font-semibold ${active ? "text-maize" : "text-gray-100"}`}>
-                            {p.title}
-                          </span>
-                          {p.proprietary && <LockIcon className="h-3 w-3 shrink-0 text-sky-400/80" />}
+                      <span className="font-mono text-xs text-maize/60">{p.code}</span>
+                      <span className="flex-1 min-w-0">
+                        <span className={`block truncate font-semibold ${active ? "text-maize" : "text-gray-200"}`}>
+                          {p.title}
                         </span>
-                        <span className="mt-0.5 block truncate text-xs text-gray-400">{p.org}</span>
-                        <span className="mt-0.5 block font-mono text-[10px] tracking-wide text-gray-500">
-                          {p.category.toUpperCase()} · {p.timeframe}
+                        <span className="block font-mono text-[10px] tracking-wide text-gray-500 truncate">
+                          {p.org.toUpperCase()}
                         </span>
                       </span>
+                      {p.proprietary && <LockIcon className="h-3 w-3 shrink-0 text-sky-400/80" />}
                       <ChevronRightIcon
-                        className={`h-5 w-5 shrink-0 transition-transform ${
-                          active ? "text-maize" : "text-gray-600 group-hover:translate-x-0.5 group-hover:text-maize"
+                        className={`h-4 w-4 shrink-0 transition-transform ${
+                          active ? "text-maize" : "text-gray-600 group-hover:translate-x-0.5"
                         }`}
                       />
                     </button>

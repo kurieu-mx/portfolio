@@ -69,8 +69,12 @@ echo "oidc: ${OIDC_ARN}"
 # --------------------------------------------------------------------------
 say "IAM role for GitHub Actions"
 GH_ROLE="${NAME}-github-actions"
-# The trust policy pins both the repository AND the branch, so a fork or a PR
-# from another branch cannot assume this role.
+# The trust policy pins the repository, so a fork cannot assume this role.
+#
+# Both subject forms are required. A job that declares `environment:` gets an
+# OIDC token whose sub is "repo:<repo>:environment:<name>" -- NOT the
+# "ref:refs/heads/main" form. Listing only the ref form fails the deploy job
+# with "Not authorized to perform sts:AssumeRoleWithWebIdentity".
 cat > /tmp/gh-trust.json <<JSON
 {
   "Version": "2012-10-17",
@@ -80,7 +84,10 @@ cat > /tmp/gh-trust.json <<JSON
     "Action": "sts:AssumeRoleWithWebIdentity",
     "Condition": {
       "StringEquals": {"token.actions.githubusercontent.com:aud": "sts.amazonaws.com"},
-      "StringLike": {"token.actions.githubusercontent.com:sub": "repo:${GITHUB_REPO}:ref:refs/heads/main"}
+      "StringLike": {"token.actions.githubusercontent.com:sub": [
+        "repo:${GITHUB_REPO}:ref:refs/heads/main",
+        "repo:${GITHUB_REPO}:environment:production"
+      ]}
     }
   }]
 }

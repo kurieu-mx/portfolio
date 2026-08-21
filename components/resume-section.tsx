@@ -63,13 +63,13 @@ export function ResumeSection() {
   return (
     <section id="resume-download" className="hud-grid scanlines py-16 md:py-24 bg-dark-grey-900">
       <div className="container px-4 md:px-6">
-        <SectionHeading index="05" eyebrow="DOSSIER" title="Resume" subtitle="Experience, skills, and the one-page PDF." />
+        <SectionHeading index="05" eyebrow="DOSSIER" title="Résumé" subtitle="Experience, skills, and the one-page PDF." />
 
         <div className="max-w-3xl mx-auto space-y-8">
           <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 bg-dark-grey-800">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 space-y-0">
               <div>
-                <CardTitle className="text-maize">Download my resume</CardTitle>
+                <CardTitle className="text-maize">Download my résumé</CardTitle>
                 <p className="text-sm text-gray-400 mt-1">The full one-page PDF, up to date.</p>
               </div>
               <Link href={RESUME_PATH} target="_blank" rel="noopener noreferrer" download>

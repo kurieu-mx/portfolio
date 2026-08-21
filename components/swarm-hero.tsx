@@ -331,7 +331,7 @@ export function SwarmHero() {
                 className="rounded-none border-maize/60 bg-transparent px-7 py-6 text-base font-semibold text-maize hover:bg-maize hover:text-umich-blue-800"
               >
                 <a href={RESUME_PATH} target="_blank" rel="noopener noreferrer">
-                  <FileTextIcon className="mr-2 h-4 w-4" /> Resume
+                  <FileTextIcon className="mr-2 h-4 w-4" /> Résumé
                 </a>
               </Button>
               <Button

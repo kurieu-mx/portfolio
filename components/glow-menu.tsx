@@ -38,7 +38,7 @@ const menuItems: MenuItem[] = [
   },
   {
     id: "resume-download",
-    label: "Resume/CV",
+    label: "Résumé/CV",
     href: "#resume-download",
     icon: <FileTextIcon className="w-5 h-5" />,
   },

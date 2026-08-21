@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ArrowDownIcon, GithubIcon, LinkedinIcon, MailIcon } from "lucide-react"
+import { ArrowDownIcon, DownloadIcon, FileTextIcon, GithubIcon, LinkedinIcon, MailIcon } from "lucide-react"
 
 const operatorPhotos = [
   { src: "/images/tedx-presentation.jpg", label: "TEDx SPEAKER" },
@@ -22,6 +22,7 @@ interface Agent {
 }
 
 const MAIZE = "#FFCB05"
+const RESUME_PATH = "/Eugenio-Kuri-Resume.pdf"
 
 function SwarmCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -325,6 +326,15 @@ export function SwarmHero() {
                 View Work <ArrowDownIcon className="ml-2 h-4 w-4" />
               </Button>
               <Button
+                asChild
+                variant="outline"
+                className="rounded-none border-maize/60 bg-transparent px-7 py-6 text-base font-semibold text-maize hover:bg-maize hover:text-umich-blue-800"
+              >
+                <a href={RESUME_PATH} target="_blank" rel="noopener noreferrer">
+                  <FileTextIcon className="mr-2 h-4 w-4" /> Resume (PDF)
+                </a>
+              </Button>
+              <Button
                 onClick={() => scrollTo("contact")}
                 variant="outline"
                 className="rounded-none border-maize/60 bg-transparent px-7 py-6 text-base font-semibold text-maize hover:bg-maize hover:text-umich-blue-800"
@@ -395,6 +405,15 @@ export function SwarmHero() {
                   <span className="text-maize/60">STATUS</span>Open to work
                 </div>
               </div>
+              <a
+                href={RESUME_PATH}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="mt-3 flex items-center justify-center gap-2 border border-maize/50 bg-maize/10 px-3 py-2 text-[11px] tracking-widest text-maize transition-colors hover:bg-maize hover:text-umich-blue-800"
+              >
+                <DownloadIcon className="h-3.5 w-3.5" /> DOWNLOAD DOSSIER // PDF
+              </a>
             </div>
           </div>
         </div>

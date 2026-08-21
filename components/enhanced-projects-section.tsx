@@ -239,7 +239,7 @@ export function EnhancedProjectsSection() {
 
         <div className="grid lg:grid-cols-[minmax(0,380px)_1fr] gap-6">
           {/* Project list */}
-          <div className="hud-panel border border-maize/25 bg-black/40 backdrop-blur-sm self-start">
+          <div className="hud-panel min-w-0 border border-maize/25 bg-black/40 backdrop-blur-sm self-start">
             <div className="flex items-center justify-between px-4 py-3 border-b border-maize/15 font-mono text-[10px] tracking-widest text-maize/70">
               <span>MISSIONS · E. KURI</span>
               <span>{list.length} FOUND</span>
@@ -282,7 +282,7 @@ export function EnhancedProjectsSection() {
           {selected && (
             <div
               key={selected.id}
-              className="hud-panel animate-fade-in-up relative overflow-hidden border border-maize/25 bg-dark-grey-900/70 backdrop-blur-sm flex flex-col"
+              className="hud-panel min-w-0 animate-fade-in-up relative overflow-hidden border border-maize/25 bg-dark-grey-900/70 backdrop-blur-sm flex flex-col"
             >
               <div className="briefing-scan pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-maize/25 to-transparent" />
 

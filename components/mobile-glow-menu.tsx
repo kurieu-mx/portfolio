@@ -106,15 +106,15 @@ export function MobileGlowMenu() {
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 lg:hidden">
+    <div className="fixed bottom-4 left-1/2 w-max max-w-[calc(100vw-1rem)] -translate-x-1/2 transform z-50 lg:hidden">
       <div className="bg-dark-grey-900/90 backdrop-blur-md rounded-2xl p-1 border border-dark-grey-600 shadow-2xl">
         <nav>
-          <ul className="flex space-x-1">
+          <ul className="flex space-x-0.5 sm:space-x-1">
             {menuItems.map((item) => (
               <li key={item.id}>
                 <button
                   onClick={() => scrollToSection(item.href, item.id)}
-                  className={`group relative flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-300 ${
+                  className={`group relative flex flex-col items-center gap-1 px-1.5 py-2 sm:px-2 rounded-xl transition-all duration-300 ${
                     activeSection === item.id
                       ? "bg-maize/20 text-maize shadow-lg shadow-maize/25"
                       : "text-gray-400 hover:text-maize hover:bg-maize/10"

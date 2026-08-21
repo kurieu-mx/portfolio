@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     # Dormant until the infrastructure exists. `vars` (unlike `secrets`) is
     # readable in a job-level condition.
-    if: vars.AWS_ROLE_ARN != ''
+    if: vars.NEXT_PUBLIC_SITE_URL != ''
     permissions:
       contents: read
       id-token: write # required to mint the OIDC token AWS trades for a role
@@ -33,8 +33,14 @@ jobs:
       - name: Assume AWS role via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+
+      # The account id appears in the ECR registry hostname, which is derived at
+      # runtime and therefore not masked by GitHub automatically. Register it so
+      # it is redacted from this public repository's logs.
+      - name: Mask account id
+        run: echo "::add-mask::$(aws sts get-caller-identity --query Account --output text)"
 
       - name: Log in to ECR
         id: ecr
@@ -66,14 +72,14 @@ jobs:
       # Compose files are staged in S3 rather than scp'd: there is no SSH path
       # to this instance at all.
       - name: Stage deploy files
-        run: aws s3 sync deploy/ "s3://${{ vars.DEPLOY_BUCKET }}/deploy/" --delete --exclude '.env.example'
+        run: aws s3 sync deploy/ "s3://${{ secrets.DEPLOY_BUCKET }}/deploy/" --delete --exclude '.env.example'
 
   deploy:
     name: Release to EC2
     needs: build
     runs-on: ubuntu-latest
     environment: production
-    if: vars.AWS_ROLE_ARN != ''
+    if: vars.NEXT_PUBLIC_SITE_URL != ''
     permissions:
       contents: read
       id-token: write
@@ -81,15 +87,18 @@ jobs:
       - name: Assume AWS role via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Mask account id
+        run: echo "::add-mask::$(aws sts get-caller-identity --query Account --output text)"
 
       # Driven through SSM, so the security group never opens port 22 and there
       # are no SSH keys stored in GitHub.
       - name: Release via SSM
         env:
-          INSTANCE_ID: ${{ vars.EC2_INSTANCE_ID }}
-          BUCKET: ${{ vars.DEPLOY_BUCKET }}
+          INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
+          BUCKET: ${{ secrets.DEPLOY_BUCKET }}
           IMAGE: ${{ needs.build.outputs.image }}
         run: |
           set -euo pipefail

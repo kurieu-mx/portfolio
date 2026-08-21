@@ -1,16 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Emit a self-contained server bundle (.next/standalone) so the runtime image
+  // ships only the files actually imported, not the whole node_modules tree.
+  output: "standalone",
+
+  // Both gates below used to be disabled. They are on now: `recharts` was
+  // pinned to ^2 (it was "latest", which floated to 3.x and broke the generated
+  // shadcn chart types), and ESLint is configured in eslint.config.mjs.
   eslint: {
-    // Note: kept on because the generated shadcn/ui files trip lint rules.
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    // Note: kept on because components/ui/chart.tsx has upstream recharts type
-    // mismatches; your own code type-checks cleanly.
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
+
   images: {
-    // Serve modern formats and responsive sizes (Vercel optimizes on the fly).
+    // Self-hosted optimization is handled by `sharp`, installed in the runner
+    // stage of the Dockerfile.
     formats: ["image/avif", "image/webp"],
   },
 }

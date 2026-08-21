@@ -9,7 +9,8 @@ export function SectionHeading({ index, eyebrow, title, subtitle }: SectionHeadi
   return (
     <div className="text-center mb-12">
       <p className="font-mono text-maize/70 text-xs sm:text-sm tracking-[0.3em]">
-        // {index} · {eyebrow}
+        {"// "}
+        {index} · {eyebrow}
       </p>
       <h2 className="mt-3 text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-maize via-maize-200 to-maize-400 bg-clip-text text-transparent">
         {title}

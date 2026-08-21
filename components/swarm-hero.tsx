@@ -276,7 +276,7 @@ export function SwarmHero() {
 
       {/* Top HUD bar */}
       <div className="pointer-events-none absolute top-0 inset-x-0 flex items-center justify-between px-4 md:px-8 h-14 font-mono text-[10px] md:text-xs tracking-widest text-maize/70 z-20">
-        <span>// GROUND CONTROL — EK.SYS</span>
+        <span>{"// GROUND CONTROL — EK.SYS"}</span>
         <span className="flex items-center gap-2 text-emerald-300">
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" /> OPEN TO WORK — SWE / AI
         </span>

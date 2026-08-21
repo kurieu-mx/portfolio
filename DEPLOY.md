@@ -36,11 +36,34 @@ a broken commit cannot produce a deployable artifact.
 
 ## One-time setup
 
-### 1. Domain
+### 1. DNS (Cloudflare)
 
-Register one (~$10–15/yr) and point an `A` record at the server's IPv4, plus
-`AAAA` for IPv6 and a `www` `CNAME`. Caddy issues the certificate on first
-request — nothing to run by hand.
+Domain is `eugeniokuri.com`, registered through Cloudflare, so DNS is managed
+there too. Once the server has an IP, add:
+
+| Type | Name | Content | Proxy |
+|---|---|---|---|
+| `A` | `@` | server IPv4 | **DNS only** (grey) at first |
+| `AAAA` | `@` | server IPv6 | **DNS only** (grey) at first |
+| `CNAME` | `www` | `eugeniokuri.com` | **DNS only** (grey) at first |
+
+**Start grey-clouded.** Caddy gets its certificate from Let's Encrypt on the
+first request. With the orange cloud on, the TLS-ALPN-01 challenge cannot
+reach the origin, and issuance is at best flaky. Grey cloud, confirm
+`https://eugeniokuri.com` serves with a valid Let's Encrypt cert, and only
+then decide about proxying.
+
+**If you turn the orange cloud on afterwards, set SSL/TLS mode to
+`Full (strict)` first.** The default on some zones is `Flexible`, which
+terminates TLS at Cloudflare and talks plain HTTP to the origin — Caddy
+answers that with a redirect to HTTPS, Cloudflare follows it back to itself,
+and the site dies in an infinite redirect loop. `Full (strict)` is the only
+correct setting here, and it works because Caddy holds a real public cert.
+
+Proxying is optional. It buys DDoS protection, caching and a hidden origin IP;
+it costs you real client IPs in logs unless you uncomment the `trusted_proxies`
+block in `deploy/Caddyfile`. Either choice is defensible — grey cloud is one
+less moving part, and the site is behind a CDN either way only if you want it.
 
 ### 2. Server
 

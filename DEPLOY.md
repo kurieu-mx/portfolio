@@ -9,14 +9,22 @@ push to main
   │
   ├─ CI ............... eslint · tsc --noEmit
   │
-  ├─ build ............ docker buildx (multi-stage, Next standalone)
-  │                     └─ ghcr.io/kurieu-mx/portfolio:<sha>  +  :latest
+  ├─ build ............ OIDC → sts:AssumeRole (no stored AWS keys)
+  │                     docker buildx (multi-stage, Next standalone)
+  │                     └─ <acct>.dkr.ecr.us-east-1.amazonaws.com/portfolio:<sha>
+  │                     stage deploy/ → S3
   │
-  └─ deploy ........... scp compose files → ssh release.sh
+  └─ deploy ........... ssm send-command (no SSH, port 22 never opens)
+                        s3 sync → /opt/portfolio
                         docker compose pull && up -d --wait
                         verify /healthz reports the expected commit
                         └─ mismatch or timeout → roll back to previous image
 ```
+
+Runs on AWS: EC2 `t3a.micro` behind Caddy, images in ECR, releases driven
+through SSM. There are **no long-lived credentials anywhere** — GitHub mints a
+short-lived OIDC token that AWS trades for a role scoped to this repo and
+branch, and the instance pulls from ECR with its own instance role.
 
 Quality gates are enforced in `next.config.mjs` (`ignoreDuringBuilds: false`,
 `ignoreBuildErrors: false`), so a lint or type error fails the **image build** —
@@ -27,6 +35,7 @@ a broken commit cannot produce a deployable artifact.
 | Path | Role |
 |---|---|
 | `Dockerfile` | 3-stage build: `deps` → `builder` → `runner` (non-root, `sharp`, healthcheck) |
+| `deploy/aws-bootstrap.sh` | Creates ECR, S3, IAM/OIDC, security group, EC2, Elastic IP |
 | `deploy/docker-compose.yml` | App + Caddy, run on the server |
 | `deploy/Caddyfile` | TLS termination, cache headers, reverse proxy |
 | `deploy/release.sh` | Server-side release: pull, swap, health-gate, roll back |
@@ -65,83 +74,73 @@ it costs you real client IPs in logs unless you uncomment the `trusted_proxies`
 block in `deploy/Caddyfile`. Either choice is defensible — grey cloud is one
 less moving part, and the site is behind a CDN either way only if you want it.
 
-### 2. Server
-
-Hetzner CX22 (~€3.79/mo) or equivalent, Ubuntu 24.04:
+### 2. AWS infrastructure
 
 ```bash
-# as root, once
-adduser --disabled-password --gecos "" deploy
-usermod -aG docker deploy          # after installing Docker
-curl -fsSL https://get.docker.com | sh
-
-# lock down ssh: no passwords, no root login
-sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
-sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/'               /etc/ssh/sshd_config
-systemctl restart ssh
-
-ufw allow OpenSSH && ufw allow 80 && ufw allow 443 && ufw --force enable
+aws sso login --profile kroger
+./deploy/aws-bootstrap.sh
 ```
 
-Then, as `deploy`:
+Idempotent — re-running reuses whatever already exists. It creates:
+
+| Resource | Notes |
+|---|---|
+| ECR repository | scan-on-push; untagged layers expire after 14 days |
+| S3 bucket | staging for `deploy/`; encrypted, all public access blocked |
+| OIDC provider + role | trust policy pins `repo:kurieu-mx/portfolio:ref:refs/heads/main` |
+| EC2 instance role | SSM core + ECR read-only + read the deploy bucket |
+| Security group | **80 and 443 only** — port 22 is deliberately never opened |
+| EC2 `t3a.micro` | Amazon Linux 2023, IMDSv2 required, 20 GB encrypted gp3 |
+| Elastic IP | free while attached; keeps DNS stable across reboots |
+
+It prints the variable values to paste into GitHub at the end.
+
+### 3. Seed the server
 
 ```bash
-mkdir -p ~/portfolio && cd ~/portfolio
-cp /path/to/repo/deploy/.env.example .env
-$EDITOR .env          # set SITE_DOMAIN; CI overwrites IMAGE on every deploy
+aws ssm start-session --target <instance-id> --profile kroger --region us-east-1
+sudo mkdir -p /opt/portfolio
+sudo tee /opt/portfolio/.env <<'EOF'
+IMAGE=<acct>.dkr.ecr.us-east-1.amazonaws.com/portfolio:latest
+SITE_DOMAIN=eugeniokuri.com
+EOF
 ```
 
-`release.sh` refuses to run without `.env`, so this step cannot be skipped silently.
-
-### 3. Deploy key
-
-```bash
-ssh-keygen -t ed25519 -f ./deploy_key -N ""      # locally
-ssh-copy-id -i ./deploy_key.pub deploy@<server>
-ssh-keyscan -H <server>                          # value for SSH_KNOWN_HOSTS
-```
+`release.sh` refuses to run without `.env`, so this cannot be skipped silently.
 
 ### 4. GitHub configuration
 
-**Secrets** (Settings → Secrets and variables → Actions → Secrets):
+All **variables**, no secrets — OIDC removes the need for stored credentials
+(Settings → Secrets and variables → Actions → Variables):
 
 | Name | Value |
 |---|---|
-| `SSH_HOST` | server IP or hostname |
-| `SSH_USER` | `deploy` |
-| `SSH_PRIVATE_KEY` | contents of `deploy_key` |
-| `SSH_KNOWN_HOSTS` | output of `ssh-keyscan -H <server>` |
-| `SSH_PORT` | only if not 22 |
-
-**Variables** (same page → Variables):
-
-| Name | Value |
-|---|---|
-| `NEXT_PUBLIC_SITE_URL` | `https://yourdomain.com` — no trailing slash |
+| `AWS_ROLE_ARN` | printed by the bootstrap script |
+| `DEPLOY_BUCKET` | printed by the bootstrap script |
+| `EC2_INSTANCE_ID` | printed by the bootstrap script |
+| `NEXT_PUBLIC_SITE_URL` | `https://eugeniokuri.com` — no trailing slash |
 
 `NEXT_PUBLIC_SITE_URL` is inlined into the client bundle at build time, so it is
 a **build arg**, not a runtime env var. Changing it requires a rebuild, not a
 restart. It drives `metadataBase`, OpenGraph, `sitemap.xml` and `robots.txt`
 via `lib/site.ts`.
 
-### 5. Make the GHCR package public
-
-After the first successful build: GitHub → Packages → `portfolio` → Package
-settings → Change visibility → Public. Otherwise the server needs a registry
-login to pull.
+`AWS_ROLE_ARN` doubles as the switch that arms deployment: both jobs are
+guarded on it and stay skipped until it is set.
 
 ## Operating it
 
 ```bash
-# what is running
-cd ~/portfolio && docker compose ps && curl -s localhost/healthz
+# shell on the box -- no SSH key, no open port
+aws ssm start-session --target <instance-id> --profile kroger --region us-east-1
 
-# logs
+cd /opt/portfolio
+docker compose ps
 docker compose logs -f app
 docker compose logs -f caddy
 
 # manual rollback to any previously built commit
-./release.sh ghcr.io/kurieu-mx/portfolio:<sha> <sha>
+./release.sh <acct>.dkr.ecr.us-east-1.amazonaws.com/portfolio:<sha> <sha>
 ```
 
 Re-run a deploy without a code change from the Actions tab → Deploy →
@@ -168,3 +167,7 @@ docker run --rm -p 3000:3000 portfolio:local
 - `app/opengraph-image.tsx` uses the edge runtime; this works under
   `next start`/standalone and returns a 1200×630 PNG.
 - Vercel can stay connected in parallel; it is unaffected by any of this.
+- The image is built `linux/amd64` because the repo is private, where GitHub's
+  free ARM runners are not available and `linux/arm64` would mean QEMU
+  emulation. Making the repo public would allow a Graviton `t4g.micro` and a
+  native ARM build, for roughly $0.73/mo less.

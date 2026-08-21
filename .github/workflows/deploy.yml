@@ -10,95 +10,116 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: portfolio
 
 jobs:
   build:
-    name: Build & push image
+    name: Build & push to ECR
     runs-on: ubuntu-latest
-    # Deployment stays dormant until the server is configured. `vars` (unlike
-    # `secrets`) is readable in a job-level condition, so NEXT_PUBLIC_SITE_URL
-    # doubles as the "infrastructure exists" switch -- no red X on every push
-    # before the VPS is up.
-    if: vars.NEXT_PUBLIC_SITE_URL != ''
+    # Dormant until the infrastructure exists. `vars` (unlike `secrets`) is
+    # readable in a job-level condition.
+    if: vars.AWS_ROLE_ARN != ''
     permissions:
       contents: read
-      packages: write
+      id-token: write # required to mint the OIDC token AWS trades for a role
     outputs:
       image: ${{ steps.meta.outputs.image }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
+      # No long-lived AWS keys anywhere: GitHub mints a short-lived OIDC token,
+      # AWS exchanges it for temporary credentials scoped to this repo+branch.
+      - name: Assume AWS role via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - uses: docker/setup-buildx-action@v3
 
       - name: Compute image reference
         id: meta
         run: |
-          repo="${IMAGE_NAME,,}"   # GHCR requires a lowercase path
-          echo "image=${REGISTRY}/${repo}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-          echo "latest=${REGISTRY}/${repo}:latest" >> "$GITHUB_OUTPUT"
+          echo "image=${{ steps.ecr.outputs.registry }}/${ECR_REPOSITORY}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "latest=${{ steps.ecr.outputs.registry }}/${ECR_REPOSITORY}:latest" >> "$GITHUB_OUTPUT"
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
+          platforms: linux/amd64
           tags: |
             ${{ steps.meta.outputs.image }}
             ${{ steps.meta.outputs.latest }}
           build-args: |
             NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
             GIT_SHA=${{ github.sha }}
-          # Cache layers in the Actions cache so npm ci and the Next build are
-          # only re-run when their inputs actually change.
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Compose files are staged in S3 rather than scp'd: there is no SSH path
+      # to this instance at all.
+      - name: Stage deploy files
+        run: aws s3 sync deploy/ "s3://${{ vars.DEPLOY_BUCKET }}/deploy/" --delete --exclude '.env.example'
+
   deploy:
-    name: Deploy to VPS
+    name: Release to EC2
     needs: build
     runs-on: ubuntu-latest
-    if: vars.NEXT_PUBLIC_SITE_URL != ''
     environment: production
+    if: vars.AWS_ROLE_ARN != ''
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Assume AWS role via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Open SSH session
-        run: |
-          install -m 700 -d ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          # Pin the host key instead of StrictHostKeyChecking=no, so a swapped
-          # server fails the deploy rather than silently accepting a new key.
-          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-
-      - name: Sync deploy files
+      # Driven through SSM, so the security group never opens port 22 and there
+      # are no SSH keys stored in GitHub.
+      - name: Release via SSM
         env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
-        run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" 'mkdir -p ~/portfolio'
-          scp -P "$SSH_PORT" deploy/docker-compose.yml deploy/Caddyfile deploy/release.sh \
-            "$SSH_USER@$SSH_HOST:~/portfolio/"
-
-      - name: Release with health gate and rollback
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+          INSTANCE_ID: ${{ vars.EC2_INSTANCE_ID }}
+          BUCKET: ${{ vars.DEPLOY_BUCKET }}
           IMAGE: ${{ needs.build.outputs.image }}
         run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            "bash ~/portfolio/release.sh '$IMAGE' '${{ github.sha }}'"
+          set -euo pipefail
+          command_id="$(aws ssm send-command \
+            --instance-ids "$INSTANCE_ID" \
+            --document-name AWS-RunShellScript \
+            --comment "deploy ${GITHUB_SHA::7}" \
+            --parameters commands="[\"set -euo pipefail\",\"aws s3 sync s3://${BUCKET}/deploy/ /opt/portfolio/ --delete --exclude .env\",\"chmod +x /opt/portfolio/release.sh\",\"/opt/portfolio/release.sh '${IMAGE}' '${GITHUB_SHA}'\"]" \
+            --query 'Command.CommandId' --output text)"
+          echo "ssm command: $command_id"
+
+          aws ssm wait command-executed \
+            --command-id "$command_id" --instance-id "$INSTANCE_ID" || true
+
+          aws ssm get-command-invocation \
+            --command-id "$command_id" --instance-id "$INSTANCE_ID" \
+            --query 'StandardOutputContent' --output text
+
+          status="$(aws ssm get-command-invocation \
+            --command-id "$command_id" --instance-id "$INSTANCE_ID" \
+            --query 'Status' --output text)"
+
+          if [ "$status" != "Success" ]; then
+            echo "--- stderr ---" >&2
+            aws ssm get-command-invocation \
+              --command-id "$command_id" --instance-id "$INSTANCE_ID" \
+              --query 'StandardErrorContent' --output text >&2
+            echo "release failed with SSM status: $status" >&2
+            exit 1
+          fi
 
       - name: Verify public endpoint
         env:

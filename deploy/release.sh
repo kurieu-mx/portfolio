@@ -25,6 +25,13 @@ previous="$(grep -E '^IMAGE=' "$env_file" | cut -d= -f2- || true)"
 echo "current: ${previous:-<none>}"
 echo "target:  ${IMAGE}"
 
+# Authenticate to ECR using the EC2 instance role -- no registry password is
+# stored on the box, and the token it mints expires in 12 hours.
+registry="${IMAGE%%/*}"
+region="$(echo "$registry" | cut -d. -f4)"
+aws ecr get-login-password --region "$region" \
+  | docker login --username AWS --password-stdin "$registry"
+
 docker compose pull app
 set_image "$IMAGE"
 

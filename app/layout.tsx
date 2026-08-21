@@ -3,10 +3,9 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
+import { siteUrl } from "@/lib/site"
 
 const inter = Inter({ subsets: ["latin"] })
-
-const siteUrl = "https://portfolio-eugenio-kuri.vercel.app"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

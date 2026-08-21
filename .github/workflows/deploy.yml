@@ -1,0 +1,113 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    name: Build & push image
+    runs-on: ubuntu-latest
+    # Deployment stays dormant until the server is configured. `vars` (unlike
+    # `secrets`) is readable in a job-level condition, so NEXT_PUBLIC_SITE_URL
+    # doubles as the "infrastructure exists" switch -- no red X on every push
+    # before the VPS is up.
+    if: vars.NEXT_PUBLIC_SITE_URL != ''
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image reference
+        id: meta
+        run: |
+          repo="${IMAGE_NAME,,}"   # GHCR requires a lowercase path
+          echo "image=${REGISTRY}/${repo}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "latest=${REGISTRY}/${repo}:latest" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}
+            ${{ steps.meta.outputs.latest }}
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            GIT_SHA=${{ github.sha }}
+          # Cache layers in the Actions cache so npm ci and the Next build are
+          # only re-run when their inputs actually change.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to VPS
+    needs: build
+    runs-on: ubuntu-latest
+    if: vars.NEXT_PUBLIC_SITE_URL != ''
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Open SSH session
+        run: |
+          install -m 700 -d ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          # Pin the host key instead of StrictHostKeyChecking=no, so a swapped
+          # server fails the deploy rather than silently accepting a new key.
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Sync deploy files
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+        run: |
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" 'mkdir -p ~/portfolio'
+          scp -P "$SSH_PORT" deploy/docker-compose.yml deploy/Caddyfile deploy/release.sh \
+            "$SSH_USER@$SSH_HOST:~/portfolio/"
+
+      - name: Release with health gate and rollback
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+          IMAGE: ${{ needs.build.outputs.image }}
+        run: |
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "bash ~/portfolio/release.sh '$IMAGE' '${{ github.sha }}'"
+
+      - name: Verify public endpoint
+        env:
+          SITE: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+        run: |
+          for i in $(seq 1 10); do
+            code="$(curl -s -o /dev/null -w '%{http_code}' "$SITE/healthz" || true)"
+            if [ "$code" = "200" ]; then echo "public /healthz ok"; exit 0; fi
+            echo "attempt $i: got $code, retrying"; sleep 5
+          done
+          echo "public /healthz never returned 200" >&2
+          exit 1

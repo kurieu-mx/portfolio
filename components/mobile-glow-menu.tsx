@@ -27,7 +27,7 @@ const menuItems: MenuItem[] = [
   },
   {
     id: "about",
-    label: "About Me",
+    label: "About",
     href: "#about",
     icon: <UserIcon className="w-4 h-4" />,
   },
@@ -133,7 +133,7 @@ export function MobileGlowMenu() {
 
                   {/* Label */}
                   <span
-                    className={`text-xs font-medium transition-all duration-300 ${
+                    className={`text-[11px] font-medium leading-tight whitespace-nowrap transition-all duration-300 ${
                       activeSection === item.id ? "text-maize" : "text-gray-400 group-hover:text-maize"
                     }`}
                   >

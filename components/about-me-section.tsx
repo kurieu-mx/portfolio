@@ -1,19 +1,22 @@
 "use client"
 
-import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, LabelList } from "recharts"
+import { Bar, BarChart, XAxis, YAxis, LabelList } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { SectionHeading } from "@/components/section-heading"
 import { SectionFX } from "@/components/section-fx"
+import { useIsMobile } from "@/hooks/use-mobile"
 
+// `short` is used below the md breakpoint: the full labels need a 170px axis,
+// which would leave almost no room for the bars on a phone.
 const skillsData = [
-  { name: "Python", level: 92, fill: "#FFCB05" },
-  { name: "Go (Golang)", level: 88, fill: "#FFCB05" },
-  { name: "C++", level: 88, fill: "#FFCB05" },
-  { name: "Robotics (ROS 2 / PX4)", level: 85, fill: "#FFCB05" },
-  { name: "Computer Vision (OpenCV / YOLO)", level: 85, fill: "#FFCB05" },
-  { name: "Cloud & Data (GCP / BigQuery)", level: 80, fill: "#FFCB05" },
+  { name: "Python", short: "Python", level: 92, fill: "#FFCB05" },
+  { name: "Go (Golang)", short: "Go", level: 88, fill: "#FFCB05" },
+  { name: "C++", short: "C++", level: 88, fill: "#FFCB05" },
+  { name: "Robotics (ROS 2 / PX4)", short: "Robotics", level: 85, fill: "#FFCB05" },
+  { name: "Computer Vision (OpenCV / YOLO)", short: "Computer Vision", level: 85, fill: "#FFCB05" },
+  { name: "Cloud & Data (GCP / BigQuery)", short: "Cloud & Data", level: 80, fill: "#FFCB05" },
 ]
 
 const interests = [
@@ -37,6 +40,9 @@ const coursework = [
 ]
 
 export function AboutMeSection() {
+  const isMobile = useIsMobile()
+  const chartData = isMobile ? skillsData.map((d) => ({ ...d, name: d.short })) : skillsData
+
   return (
     <section id="about" className="hud-grid py-16 md:py-24 bg-dark-grey-900">
       <SectionFX variant="constellation" />
@@ -49,7 +55,7 @@ export function AboutMeSection() {
         />
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             <div className="prose prose-lg max-w-none">
               <p className="text-lg text-gray-300 leading-relaxed">
                 Hi, I&apos;m <span className="font-semibold text-maize">Eugenio Kuri</span> — a{" "}
@@ -93,7 +99,7 @@ export function AboutMeSection() {
             </Card>
           </div>
 
-          <div className="space-y-8">
+          <div className="min-w-0 space-y-8">
             <Card className="hud-panel shadow-lg border-2 border-dark-grey-600 hover:border-maize/50 transition-all duration-300 bg-dark-grey-800">
               <CardHeader>
                 <CardTitle className="text-maize">Technical Skills</CardTitle>
@@ -104,24 +110,22 @@ export function AboutMeSection() {
                   config={{ level: { label: "Proficiency", color: "#FFCB05" } }}
                   className="min-h-[300px] w-full"
                 >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={skillsData} layout="vertical" margin={{ left: 8, right: 40 }}>
-                      <XAxis type="number" domain={[0, 100]} hide />
-                      <YAxis
-                        dataKey="name"
-                        type="category"
-                        tickLine={false}
-                        tickMargin={8}
-                        axisLine={false}
-                        width={170}
-                        tick={{ fill: "#D1D5DB", fontSize: 12 }}
-                      />
-                      <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                      <Bar dataKey="level" radius={5} fill="#FFCB05">
-                        <LabelList dataKey="level" position="right" className="fill-gray-400 text-xs" />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <BarChart data={chartData} layout="vertical" margin={{ left: 8, right: isMobile ? 28 : 40 }}>
+                    <XAxis type="number" domain={[0, 100]} hide />
+                    <YAxis
+                      dataKey="name"
+                      type="category"
+                      tickLine={false}
+                      tickMargin={8}
+                      axisLine={false}
+                      width={isMobile ? 108 : 170}
+                      tick={{ fill: "#D1D5DB", fontSize: isMobile ? 11 : 12 }}
+                    />
+                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                    <Bar dataKey="level" radius={5} fill="#FFCB05">
+                      <LabelList dataKey="level" position="right" className="fill-gray-400 text-xs" />
+                    </Bar>
+                  </BarChart>
                 </ChartContainer>
               </CardContent>
             </Card>

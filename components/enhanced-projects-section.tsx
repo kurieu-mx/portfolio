@@ -124,9 +124,24 @@ const projects: Project[] = [
     role: "Solo build",
     timeframe: "2025",
   },
+  {
+    id: 7,
+    code: "M-07",
+    title: "Dynasty Draft Optimizer",
+    description:
+      "A decision tool for a one-shot, 200-pick dynasty fantasy football startup draft. Rather than ranking players, it simulates the draft forward under common random numbers and takes the pick that maximizes expected end-state roster value — over age curves fit on 20 seasons, replacement level calibrated per game, and an opponent model fit on real draft-position variance. Beats naive best-available by +270 lineup points across 6/6 paired seeds, with 307 tests that run fully offline.",
+    techStack: ["Python", "NumPy", "pandas", "Monte Carlo", "Statistical Modeling", "mypy", "pytest"],
+    icon: "🏈",
+    githubUrl: "https://github.com/kurieu-mx/dynasty-draft-optimizer",
+    category: "Data Science",
+    status: "DEPLOYED",
+    org: "Independent Project",
+    role: "Solo build",
+    timeframe: "2026",
+  },
 ]
 
-const categories = ["All", "Robotics", "AI/ML", "Full Stack"]
+const categories = ["All", "Robotics", "AI/ML", "Data Science", "Full Stack"]
 
 const statusColor: Record<Status, string> = {
   DEPLOYED: "text-emerald-400",
